@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đang chuyển tới sản phẩm — Trukuky</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/tokens.css?v=2">
+<link rel="stylesheet" href="css/base.css?v=4">
+<script>
+  /* Link cũ dạng product.html?id=A2 vẫn dùng được — mỗi sản phẩm giờ có một
+     URL thật tại p/<id>.html (thẻ OG riêng, chia sẻ lên Messenger ra đúng ảnh). */
+  (function () {
+    var id = new URLSearchParams(location.search).get('id') || '';
+    location.replace(/^[A-Za-z0-9_-]+$/.test(id) ? 'p/' + id + '.html' : 'index.html#products');
+  })();
+</script>
+</head>
+<body>
+<div class="container" style="padding-block:6rem;text-align:center">
+  <p>Đang chuyển tới trang sản phẩm…</p>
+  <p><a href="index.html#products" style="color:var(--color-primary);font-weight:600">Về danh sách sản phẩm</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Trang quản lý đơn hàng — không lập chỉ mục
+Disallow: /admin/
+# Trang chuyển hướng của link sản phẩm kiểu cũ
+Disallow: /product.html
+
+Sitemap: https://son290613-collab.github.io/trukuky-web/sitemap.xml

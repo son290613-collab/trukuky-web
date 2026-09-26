@@ -1,0 +1,96 @@
+{
+  "_ghiChu": "LỜI DẪN LÀ BẢN NHÁP — shop đọc và sửa lại bằng giọng của mình trước khi lên. Mỗi bộ sưu tập chỉ cần một câu: nói cho khách biết bộ này dành cho lúc nào, chứ không mô tả lại thứ khách đã nhìn thấy trong ảnh. Thứ tự trong mảng dưới đây chính là thứ tự hiện trên trang. Bỏ một bộ thì xoá khối của nó; sản phẩm không thuộc bộ nào sẽ tự dồn xuống mục cuối.",
+  "collections": [
+    {
+      "id": "live-doi",
+      "title": "Mẹ & bé mặc đôi — vừa lên live 17/9",
+      "lead": "Những bộ có cả form mẹ lẫn form bé, shop vừa giới thiệu trong live 17/9 và vẫn còn size.",
+      "items": [
+        "L1709-M08",
+        "L1709-M06",
+        "L1709-M10",
+        "L1709-M15",
+        "L1709-M18",
+        "L1709-M16",
+        "L1709-M01",
+        "L1709-M07",
+        "L1709-M21",
+        "L1709-M13",
+        "L1709-M14",
+        "L1709-M17",
+        "L1709-M28"
+      ]
+    },
+    {
+      "id": "live-be",
+      "title": "Cho bé — vừa lên live 17/9",
+      "lead": "Váy, áo khoác, giày và tất cho bé từ buổi live 17/9, có cả vài mẫu đang giảm giá.",
+      "items": [
+        "L1709-M04",
+        "L1709-M29",
+        "L1709-M25",
+        "L1709-M24",
+        "L1709-M12",
+        "L1709-M11",
+        "L1709-M02",
+        "L1709-M30",
+        "L1709-M03",
+        "L1709-M11T"
+      ]
+    },
+    {
+      "id": "dong-dieu",
+      "title": "Đồng điệu & khoác ngoài",
+      "lead": "Những bộ mặc chồng lớp cho ngày trở gió — và bộ kaki đôi mà cả mẹ lẫn bé cùng có một cái giống nhau.",
+      "items": [
+        "A2",
+        "A1",
+        "G5",
+        "A4"
+      ]
+    },
+    {
+      "id": "diu-dang",
+      "title": "Dịu dàng có ren",
+      "lead": "Ren, nơ và tulle cho những buổi phải chụp ảnh: sinh nhật bạn, tiệc lớp, Tết nhà nội.",
+      "items": [
+        "A3",
+        "G7",
+        "G8",
+        "G9"
+      ]
+    },
+    {
+      "id": "am-mem",
+      "title": "Ấm mềm cho ngày lạnh",
+      "lead": "Nỉ dày, gấu bông và caro — mặc đi học buổi sáng Hải Phòng lạnh mà bé vẫn chạy nhảy được.",
+      "items": [
+        "G1",
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "id": "nang-dong",
+      "title": "Năng động mỗi ngày",
+      "lead": "Hoodie và đồ thể thao form rộng, thứ bé tự lấy ra mặc mà không cần mẹ chọn giúp.",
+      "items": [
+        "G10",
+        "G11",
+        "G12"
+      ]
+    },
+    {
+      "id": "di-cung",
+      "title": "Đi cùng bộ đồ",
+      "lead": "Giày và balo chụp riêng từng góc — chọn nốt món cuối để bộ đồ trọn vẹn.",
+      "items": [
+        "PK1",
+        "PK2",
+        "PK3",
+        "PK4",
+        "PK5"
+      ]
+    }
+  ]
+}

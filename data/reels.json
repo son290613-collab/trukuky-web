@@ -1,0 +1,103 @@
+[
+  {
+    "id": "reel-01",
+    "file": "videos/reel-01.mp4",
+    "poster": "videos/posters/reel-01.jpg",
+    "duration": 13,
+    "tag": "Cho mẹ",
+    "title": "Sơ mi cổ ren xanh nhạt",
+    "desc": "Sơ mi cotton xanh nhạt cổ ren thêu hoa, mặc cùng quần lụa đen. Trong khung còn có túi cói quai da buộc khăn caro và túi đeo chéo xám.",
+    "inFrame": ["Túi cói quai da", "Khăn lụa caro", "Túi đeo chéo xám"]
+  },
+  {
+    "id": "reel-02",
+    "file": "videos/reel-02.mp4",
+    "poster": "videos/posters/reel-02.jpg",
+    "duration": 18,
+    "tag": "Bé gái",
+    "title": "Set áo bèo hồng + quần dài",
+    "desc": "Áo nỉ hồng in hình gấu, gấu áo đắp tầng bèo lụa, đi cùng quần dài hồng cùng tông. Bày kèm đôi sneaker hồng và một set caro hồng nhạt.",
+    "inFrame": ["Sneaker hồng", "Set caro hồng nhạt"]
+  },
+  {
+    "id": "reel-03",
+    "file": "videos/reel-03.mp4",
+    "poster": "videos/posters/reel-03.jpg",
+    "duration": 12.5,
+    "tag": "Bé gái",
+    "title": "Áo đỏ in túi gấu + chân váy caro",
+    "desc": "Áo nỉ đỏ in hình túi xách gấu, mặc cùng chân váy caro nâu xếp tầng viền bèo. Trong khung còn có đôi giày búp bê nâu và một túi cói nhỏ.",
+    "inFrame": ["Giày búp bê nâu", "Túi cói nhỏ"]
+  },
+  {
+    "id": "reel-04",
+    "file": "videos/reel-04.mp4",
+    "poster": "videos/posters/reel-04.jpg",
+    "duration": 26,
+    "tag": "Cho mẹ",
+    "title": "Áo len xám thêu hoa + quần ống rộng",
+    "desc": "Áo len cộc tay xám thêu hoa nổi, mặc cùng quần ống rộng màu kem. Phối cùng túi tote đan và túi đeo chéo có móc ngôi sao.",
+    "inFrame": ["Túi tote đan", "Móc túi ngôi sao"]
+  },
+  {
+    "id": "reel-05",
+    "file": "videos/reel-05.mp4",
+    "poster": "videos/posters/reel-05.jpg",
+    "duration": 12.7,
+    "tag": "Cho mẹ",
+    "title": "Áo thun in gấu bông + quần short nâu",
+    "desc": "Áo thun trắng form rộng in gấu bông cỡ lớn, tay áo bo nhẹ, mặc cùng quần short vải nâu.",
+    "inFrame": []
+  },
+  {
+    "id": "reel-06",
+    "file": "videos/reel-06.mp4",
+    "poster": "videos/posters/reel-06.jpg",
+    "duration": 14,
+    "tag": "Bé gái",
+    "title": "Áo bèo ren trắng + quần short kaki",
+    "desc": "Áo sát nách ren trắng cổ sen, khoá kéo trước, mặc cùng quần short kaki rút gấu. Bé mang balo mini chần trám màu kem và tất ren trắng.",
+    "inFrame": ["Balo mini chần trám kem", "Tất ren trắng"]
+  },
+  {
+    "id": "reel-07",
+    "file": "videos/reel-07.mp4",
+    "poster": "videos/posters/reel-07.jpg",
+    "duration": 22,
+    "tag": "Đồ đôi Mẹ & Bé",
+    "title": "Pijama caro pastel — mẹ và bé",
+    "desc": "Bộ pijama vải caro pastel, cổ bẻ viền chỉ nổi, thêu gấu ở ngực trái. May hai form riêng: một bộ cho mẹ, một bộ cho bé mặc cùng.",
+    "inFrame": []
+  },
+  {
+    "id": "reel-08",
+    "file": "videos/reel-08.mp4",
+    "poster": "videos/posters/reel-08.jpg",
+    "duration": 11.6,
+    "tag": "Cho mẹ",
+    "title": "Áo nâu tay bồng + chân váy caro",
+    "desc": "Áo nâu tay bồng ngắn dáng ôm, mặc cùng chân váy caro kem xếp ly. Đeo kèm dây chuyền mặt tròn và túi vải kem.",
+    "inFrame": ["Túi vải kem"]
+  },
+  {
+    "id": "reel-09",
+    "file": "videos/reel-09.mp4",
+    "poster": "videos/posters/reel-09.jpg",
+    "duration": 21.6,
+    "tag": "Cho mẹ",
+    "title": "Áo in hình tròn + quần ống rộng xanh",
+    "desc": "Áo dáng rộng xám chấm bi in hình tròn ở ngực, phối tay áo kẻ sọc hồng, mặc cùng quần ống rộng vải xanh nhạt.",
+    "inFrame": ["Túi đeo chéo ánh bạc"]
+  },
+  {
+    "id": "reel-10",
+    "file": "videos/reel-10.mp4",
+    "poster": "videos/posters/reel-10.jpg",
+    "duration": 27,
+    "tag": "Bé gái",
+    "title": "Đầm yếm chấm bi + áo len trắng",
+    "desc": "Đầm yếm xám chấm bi cổ thuỷ thủ viền navy, khoác ngoài áo len trắng. Cuối clip là cận cảnh đôi giày búp bê tabi đen và tất ren — đúng đôi giày đang bán.",
+    "inFrame": ["Giày búp bê tabi đen", "Tất ren trắng"],
+    "productId": "PK1"
+  }
+]
