@@ -42,10 +42,11 @@ const liveBlock = (p) => {
   const lines = (p.priceLines || []).map((l) => `<li>${esc(l)}</li>`).join('');
   return `
         <div class="pd-live">
-          <p class="pd-live-head">Mẫu <b>${esc(p.live.code)}</b> trong buổi live ${esc(dm(p.live.date))}${p.live.relive ? ` · đã lên lại live ${esc(p.live.relive)}` : ''}</p>
+          <p class="pd-live-head">Mẫu <b>${esc(p.live.code)}</b> trong buổi live ${esc(dm(p.live.date))}${p.live.relive ? ` · đã lên lại live ${esc(p.live.relive)}${p.live.reliveCode ? ` (mã ${esc(p.live.reliveCode)})` : ''}` : ''}</p>
           ${lines ? `<ul>${lines}</ul>` : ''}
-          <p class="pd-live-note">Giá là giá shop niêm yết trong live. Size còn hàng lấy theo sổ chốt đơn (rà ngày ${esc(dm(p.live.stockAsOf))}) — shop xác nhận lại trước khi chốt.${p.live.note ? ` ${esc(p.live.note)}.` : ''}</p>
+          <p class="pd-live-note">Giá là giá shop niêm yết trong live. Size còn hàng lấy theo sổ chốt đơn${p.live.relive ? ` và các size bán ở live ${esc(p.live.relive)}` : ''} (rà ngày ${esc(dm(p.live.stockAsOf))}) — shop xác nhận lại trước khi chốt.${p.live.note ? ` ${esc(p.live.note)}.` : ''}</p>
           ${p.live.url ? `<a class="pd-live-link" href="${esc(p.live.url)}" target="_blank" rel="noopener">Xem đoạn live giới thiệu mẫu này ↗</a>` : ''}
+          ${p.live.reliveUrl ? `<a class="pd-live-link" href="${esc(p.live.reliveUrl)}" target="_blank" rel="noopener">Xem đoạn live ${esc(p.live.relive)} ↗</a>` : ''}
         </div>`;
 };
 
@@ -360,7 +361,7 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
   </div>
 </div>
 
-<script src="../js/data.js?v=13"></script>
+<script src="../js/data.js?v=14"></script>
 <script src="../js/ui.js?v=4"></script>
 <script src="../js/cart.js?v=2"></script>
 <script src="../js/analytics.js?v=1"></script>

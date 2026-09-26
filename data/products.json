@@ -18,8 +18,8 @@
     "priceStatus": "live",
     "priceFrom": true,
     "priceLines": [
-      "Áo bé 1-2y đến 10-12y: 390.000₫ (áo mẹ XS, S đã hết)",
-      "Quần da beo bé 8-10y: 490.000₫ · quần mẹ S, M: 690.000₫ (còn rất ít)"
+      "Áo bé 1-2y đến 10-12y: 390.000₫ (áo mẹ đã hết)",
+      "Quần da beo bé 8-10y: 490.000₫ · mẹ S: 690.000₫ (còn ít; quần mẹ M đã hết)"
     ],
     "ages": [
       "1-3T",
@@ -33,8 +33,7 @@
       "6-8y",
       "8-10y",
       "10-12y",
-      "Mẹ S",
-      "Mẹ M"
+      "Mẹ S"
     ],
     "colors": [],
     "sizeGuide": "matching",
@@ -42,8 +41,10 @@
       "code": "M01",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=379",
-      "stockAsOf": "2026-09-26",
-      "relive": "24/9"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M31",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=9640"
     }
   },
   {
@@ -79,7 +80,7 @@
       "code": "M02",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=1415",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -101,7 +102,7 @@
     "priceStatus": "live",
     "priceFrom": false,
     "priceLines": [
-      "Boot size 26 đến 37: 890.000₫ (không có size 28)"
+      "Boot size 26 đến 37: 890.000₫ (không có size 28; size 26, 27 còn ít)"
     ],
     "ages": [],
     "sizes": [
@@ -123,7 +124,7 @@
       "code": "M03",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=1629",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -144,7 +145,7 @@
     "priceStatus": "live",
     "priceFrom": false,
     "priceLines": [
-      "Váy bé 1-2y đến 12-14y: 950.000₫ (size 8-10y tạm hết)"
+      "Váy bé 1-2y đến 12-14y: 950.000₫ (size 8-10y tạm hết, 10-12y còn ít)"
     ],
     "ages": [
       "1-3T",
@@ -165,8 +166,10 @@
       "code": "M04",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=1789",
-      "stockAsOf": "2026-09-26",
-      "relive": "24/9"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M30",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=8688"
     }
   },
   {
@@ -188,9 +191,9 @@
     "priceStatus": "live",
     "priceFrom": true,
     "priceLines": [
-      "Áo gile: bé 4-6y đến 10-12y 690.000₫ · mẹ XS, S 790.000₫",
-      "Sơ mi jean: bé 10-12y 750.000₫ · mẹ XS, S 890.000₫",
-      "Chân váy nâu: bé 6-8y đến 12-14y 690.000₫ · mẹ XS 790.000₫ (còn ít)"
+      "Áo gile len: bé 4-6y đến 10-12y 690.000₫ · mẹ XS, S 790.000₫",
+      "Sơ mi jean: mẹ XS, S 890.000₫ (size bé đã hết)",
+      "Chân váy nâu: bé 8-10y 690.000₫ (còn ít; các size khác đã hết)"
     ],
     "ages": [
       "4-6T",
@@ -201,7 +204,6 @@
       "6-8y",
       "8-10y",
       "10-12y",
-      "12-14y",
       "Mẹ XS",
       "Mẹ S"
     ],
@@ -211,7 +213,7 @@
       "code": "M06",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=2492",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -233,15 +235,14 @@
     "priceStatus": "live",
     "priceFrom": true,
     "priceLines": [
-      "Bé 8-10y, 10-12y: 590.000₫",
-      "Size 12-14y, mẹ S, M: 790.000₫"
+      "Bé 8-10y: 590.000₫",
+      "Size 12-14y, mẹ S, M: 790.000₫ (size 10-12y đã hết)"
     ],
     "ages": [
       "7-12T"
     ],
     "sizes": [
       "8-10y",
-      "10-12y",
       "12-14y",
       "Mẹ S",
       "Mẹ M"
@@ -252,8 +253,10 @@
       "code": "M07",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=3227",
-      "stockAsOf": "2026-09-26",
-      "relive": "24/9"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M49",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=13752"
     }
   },
   {
@@ -275,7 +278,7 @@
     "priceStatus": "live",
     "priceFrom": true,
     "priceLines": [
-      "Áo: bé 4-6y đến 12-14y 490.000₫ · mẹ XS, S 590.000₫",
+      "Áo: bé 6-8y đến 12-14y 490.000₫ · mẹ XS, S 590.000₫",
       "Chân váy xám: bé 1-2y đến 10-12y 690.000₫ · mẹ XS, S 750.000₫"
     ],
     "ages": [
@@ -300,8 +303,10 @@
       "code": "M08",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=3726",
-      "stockAsOf": "2026-09-26",
-      "relive": "24/9"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M31",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=9886"
     }
   },
   {
@@ -323,9 +328,9 @@
     "priceStatus": "live",
     "priceFrom": true,
     "priceLines": [
-      "Gile len: bé 2-4y, 6-8y 690.000₫ · mẹ XS, S 790.000₫",
-      "Áo giữ nhiệt: bé 1-2y đến 8-10y 590.000₫ (mỗi size còn 1–2 cái)",
-      "Chân váy nhung: bé 1-2y đến 8-10y 590.000₫ · mẹ S 690.000₫"
+      "Gile len: bé 2-4y, 6-8y 690.000₫ · mẹ XS, S 790.000₫ (còn ít)",
+      "Áo giữ nhiệt: bé 1-2y đến 8-10y 590.000₫ (còn ít)",
+      "Chân váy nhung: bé 1-2y đến 8-10y 590.000₫ (mẹ đã hết)"
     ],
     "ages": [
       "1-3T",
@@ -347,7 +352,7 @@
       "code": "M10",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=5212",
-      "stockAsOf": "2026-09-26",
+      "stockAsOf": "2026-09-27",
       "note": "Còn rất ít — nhắn shop giữ hàng trước khi chuyển khoản"
     }
   },
@@ -357,21 +362,19 @@
       "live",
       "girls"
     ],
-    "badge": "Mới lên live 17/9",
-    "title": "Váy Xám Công Sở + Áo Gile Hoa",
-    "desc": "Váy xám xếp ly phối sơ mi trắng cổ bèo thắt nơ; áo gile len xám thêu hoa đi kèm bán riêng.",
+    "badge": "Lên lại live 24/9",
+    "title": "Váy Xám Công Sở Xếp Ly",
+    "desc": "Váy xám xếp ly phối sơ mi trắng cổ bèo thắt nơ.",
     "imgA": "images/products/l1709-m11.jpg",
     "imgB": "images/products/l1709-m11.jpg",
     "shots": [
-      "images/products/l1709-m11.jpg",
-      "images/products/l1709-m11-b.jpg"
+      "images/products/l1709-m11.jpg"
     ],
-    "price": 590000,
+    "price": 890000,
     "priceStatus": "live",
-    "priceFrom": true,
+    "priceFrom": false,
     "priceLines": [
-      "Váy bé 1-2y, 2-4y, 8-10y: 890.000₫",
-      "Áo gile hoa bé 8-10y: 590.000₫ (còn 1)"
+      "Váy bé 1-2y, 2-4y, 8-10y: 890.000₫ (còn ít)"
     ],
     "ages": [
       "1-3T",
@@ -388,7 +391,10 @@
       "code": "M11",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=6916",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M47",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=13391"
     }
   },
   {
@@ -421,7 +427,7 @@
       "code": "M11T",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=6945",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -458,7 +464,7 @@
       "code": "M12",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=7986",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -478,10 +484,9 @@
     ],
     "price": 690000,
     "priceStatus": "live",
-    "priceFrom": true,
+    "priceFrom": false,
     "priceLines": [
-      "Bé 1-2y đến 10-12y: 690.000₫",
-      "Mẹ S: 750.000₫ (size XS đã hết)"
+      "Bé 1-2y đến 8-10y: 690.000₫ (size 10-12y và size mẹ đã hết)"
     ],
     "ages": [
       "1-3T",
@@ -493,9 +498,7 @@
       "2-4y",
       "4-6y",
       "6-8y",
-      "8-10y",
-      "10-12y",
-      "Mẹ S"
+      "8-10y"
     ],
     "colors": [],
     "sizeGuide": "matching",
@@ -503,7 +506,7 @@
       "code": "M13",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=9062",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -526,7 +529,7 @@
     "priceFrom": true,
     "priceLines": [
       "Bé 6-8y, 8-10y: 590.000₫",
-      "Mẹ S/M: 690.000₫ (còn 2)"
+      "Mẹ S: 690.000₫ (còn ít)"
     ],
     "ages": [
       "7-12T"
@@ -542,7 +545,7 @@
       "code": "M14",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=9949",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -552,7 +555,7 @@
       "girls",
       "matching"
     ],
-    "badge": "Mới lên live 17/9",
+    "badge": "Lên lại live 24/9",
     "title": "Áo Khoác Kaki Cổ Kẻ Nâu Mẹ & Bé",
     "desc": "Áo khoác kaki be dáng lửng, cổ và gấu tay lót vải kẻ nâu. Có form mẹ và bé.",
     "imgA": "images/products/l1709-m15.jpg",
@@ -564,24 +567,16 @@
     "priceStatus": "live",
     "priceFrom": true,
     "priceLines": [
-      "Bé 2-4y đến 10-12y: 990.000₫",
-      "Size 12-14y, mẹ XS/S, M: 1.090.000₫"
+      "Bé 2-4y: 990.000₫ (còn ít)",
+      "Mẹ S: 1.090.000₫",
+      "Các size khác shop đang kiểm lại kho, nhắn shop để hỏi"
     ],
     "ages": [
-      "1-3T",
-      "4-6T",
-      "7-12T"
+      "1-3T"
     ],
     "sizes": [
       "2-4y",
-      "4-6y",
-      "6-8y",
-      "8-10y",
-      "10-12y",
-      "12-14y",
-      "Mẹ XS",
-      "Mẹ S",
-      "Mẹ M"
+      "Mẹ S"
     ],
     "colors": [],
     "sizeGuide": "matching",
@@ -589,7 +584,10 @@
       "code": "M15",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=11690",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M48",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=13627"
     }
   },
   {
@@ -630,7 +628,7 @@
       "code": "M16",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=12595",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -653,7 +651,7 @@
     "priceFrom": true,
     "priceLines": [
       "Áo: bé 10-12y, 12-14y 520.000₫ · mẹ XS, S 620.000₫",
-      "Quần jean: bé 8-10y, 10-12y 790.000₫ · mẹ M 890.000₫ (mỗi size còn 1)"
+      "Quần jean: bé 8-10y, 10-12y 790.000₫ · mẹ M 890.000₫ (còn ít)"
     ],
     "ages": [
       "7-12T"
@@ -672,7 +670,7 @@
       "code": "M17",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=13090",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -715,7 +713,7 @@
       "code": "M18",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=13725",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -762,7 +760,7 @@
       "code": "M21",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=14880",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -806,7 +804,7 @@
       "code": "M24",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=15707",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -815,7 +813,7 @@
       "live",
       "girls"
     ],
-    "badge": "Sale live 17/9",
+    "badge": "Lên lại live 24/9",
     "title": "Váy Gấm Hoa Hồng Tay Nhung (Sale)",
     "desc": "Váy gấm hoa hồng đỏ, tay nhung đỏ bo chun, gấu lót voan đỏ.",
     "imgA": "images/products/l1709-m25.jpg",
@@ -847,7 +845,10 @@
       "code": "M25",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=16145",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M15",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=4561"
     }
   },
   {
@@ -869,8 +870,8 @@
     "priceStatus": "live",
     "priceFrom": true,
     "priceLines": [
-      "Áo nhung: bé 1-2y đến 10-12y 490.000₫ (hết 4-6y) · mẹ XS, S 590.000₫",
-      "Chân váy kaki: bé 1-2y đến 10-12y 590.000₫ (còn ít) · mẹ S 650.000₫"
+      "Áo nhung: bé 1-2y, 2-4y, 8-10y, 10-12y 490.000₫ · mẹ S 590.000₫",
+      "Chân váy kaki: bé 1-2y, 2-4y, 4-6y, 10-12y 590.000₫ (còn ít) · mẹ S 650.000₫"
     ],
     "ages": [
       "1-3T",
@@ -881,10 +882,8 @@
       "1-2y",
       "2-4y",
       "4-6y",
-      "6-8y",
       "8-10y",
       "10-12y",
-      "Mẹ XS",
       "Mẹ S"
     ],
     "colors": [],
@@ -893,7 +892,7 @@
       "code": "M28",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=17514",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -902,7 +901,7 @@
       "live",
       "girls"
     ],
-    "badge": "Mới lên live 17/9",
+    "badge": "Lên lại live 24/9",
     "title": "Váy Công Chúa Ba Lỗ Hoa Nổi",
     "desc": "Váy trắng kem không tay, thân đính hạt, chân váy tulle phủ hoa vải nổi.",
     "imgA": "images/products/l1709-m29.jpg",
@@ -914,7 +913,8 @@
     "priceStatus": "live",
     "priceFrom": false,
     "priceLines": [
-      "Bé 1-2y đến 12-14y: 990.000₫"
+      "Bé 1-2y, 2-3y, 4-6y, 6-8y: 990.000₫",
+      "Các size khác shop đang kiểm lại kho, nhắn shop để hỏi"
     ],
     "ages": [
       "1-3T",
@@ -924,12 +924,8 @@
     "sizes": [
       "1-2y",
       "2-3y",
-      "3-4y",
       "4-6y",
-      "6-8y",
-      "8-10y",
-      "10-12y",
-      "12-14y"
+      "6-8y"
     ],
     "colors": [],
     "sizeGuide": "kids",
@@ -937,7 +933,10 @@
       "code": "M29",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=17899",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M40",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=11598"
     }
   },
   {
@@ -946,7 +945,7 @@
       "live",
       "girls"
     ],
-    "badge": "Mới lên live 17/9",
+    "badge": "Lên lại live 24/9",
     "title": "Quần Ống Loe Xám",
     "desc": "Quần ống loe xám than, đường may nổi giữa ống; ảnh phối cùng áo cardigan ren trắng.",
     "imgA": "images/products/l1709-m30.jpg",
@@ -958,7 +957,7 @@
     "priceStatus": "live",
     "priceFrom": false,
     "priceLines": [
-      "Bé 1-2y, 2-4y, 4-6y, 6-8y, 12-14y: 490.000₫"
+      "Bé 1-2y, 2-4y, 4-6y, 6-8y, 12-14y: 490.000₫ (còn ít)"
     ],
     "ages": [
       "1-3T",
@@ -978,7 +977,10 @@
       "code": "M30",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=18004",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27",
+      "relive": "24/9",
+      "reliveCode": "M18",
+      "reliveUrl": "https://www.facebook.com/trukuky/videos/1085774420860155/?t=5445"
     }
   },
   {
@@ -1052,12 +1054,14 @@
     "priceStatus": "live",
     "ages": [
       "1-3T",
-      "4-6T"
+      "4-6T",
+      "7-12T"
     ],
     "sizes": [
       "1-2y",
       "2-4y",
-      "4-6y"
+      "4-6y",
+      "10-12y"
     ],
     "colors": [
       {
@@ -1068,14 +1072,14 @@
     "sizeGuide": "kids",
     "priceFrom": true,
     "priceLines": [
-      "Áo khoác jean số 06 (mã M26 live 17/9, giá sale): 690.000₫ — còn bé 1-2y, 2-4y, 4-6y",
+      "Áo khoác jean số 06 (mã M26 live 17/9, giá sale): 690.000₫ — còn bé 1-2y, 2-4y, 4-6y, 10-12y",
       "Quần jean đi kèm (mã M20 live 17/9): 590.000₫ — còn bé 1-2y, 2-4y, 4-6y"
     ],
     "live": {
       "code": "M26",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=16430",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {
@@ -1618,7 +1622,7 @@
       "code": "M05",
       "date": "2026-09-17",
       "url": "https://www.facebook.com/trukuky/videos/1407028487420377/?t=2180",
-      "stockAsOf": "2026-09-26"
+      "stockAsOf": "2026-09-27"
     }
   },
   {

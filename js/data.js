@@ -30,7 +30,7 @@ function formatVND(n) {
    mọi lối vào (chip, menu, ô danh mục, link chia sẻ) đều quy về một key ở đây. */
 const PRODUCT_FILTERS = [
   { key: 'all', label: 'Tất cả' },
-  { key: 'live', label: 'Vừa lên live 17/9' },
+  { key: 'live', label: 'Mẫu live còn size' },
   { key: 'new', label: 'Mới về' },
   { key: 'matching', label: 'Đồ đôi Mẹ & Bé' },
   { key: 'accessories', label: 'Phụ kiện' },
