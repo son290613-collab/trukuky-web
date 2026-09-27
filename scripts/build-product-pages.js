@@ -215,7 +215,7 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
 <link rel="stylesheet" href="../css/tokens.css?v=4">
 <link rel="stylesheet" href="../css/base.css?v=9">
 <link rel="stylesheet" href="../css/style.css?v=27">
-<link rel="stylesheet" href="../css/shop.css?v=6">
+<link rel="stylesheet" href="../css/shop.css?v=7">
 <script type="application/ld+json">${jsonLd(p)}</script>
 </head>
 <body>

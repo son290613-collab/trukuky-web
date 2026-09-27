@@ -167,6 +167,19 @@
 .pd-price { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--color-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
 .pd-desc { max-width: 54ch; }
 .pd-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-2); }
+/* Điện thoại: ảnh không chiếm hết màn hình đầu, và nút "Nhắn hỏi mẫu" luôn
+   nằm sát đáy màn hình khi khách đang xem phần thông tin mẫu (trước đây phải
+   cuộn gần 2 màn hình mới thấy nút). */
+@media (max-width: 860px) {
+  .pd-main { width: min(100%, calc(56vh * var(--ratio, 0.73))); width: min(100%, calc(56svh * var(--ratio, 0.73))); margin-inline: auto; }
+  .pd-thumbs { justify-content: center; }
+  .pd-actions {
+    position: sticky; bottom: 0; z-index: 20; align-self: stretch;
+    padding: var(--space-3) 0 calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+    background: var(--color-bg); box-shadow: 0 -10px 16px -12px rgba(80, 28, 49, 0.25);
+  }
+  .pd-actions .btn { flex: 1 1 100%; justify-content: center; }
+}
 .pd-trust { display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-3); border-top: 1px solid var(--color-line); padding-top: var(--space-4); width: 100%; }
 .pd-trust li { display: flex; flex-direction: column; }
 .pd-trust b { font-size: var(--text-sm); }
