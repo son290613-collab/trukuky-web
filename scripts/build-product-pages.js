@@ -12,7 +12,12 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const OUT_DIR = path.join(ROOT, 'p');
-const SITE_URL = (process.env.SITE_URL || 'https://trukuky.vn').replace(/\/$/, '');
+/* Mặc định PHẢI là địa chỉ site đang chạy thật. Trước đây mặc định là
+   https://trukuky.vn — tên miền chưa hoạt động — nên chỉ cần quên biến
+   SITE_URL một lần là toàn bộ canonical, og:url và sitemap trỏ sang một
+   domain chết, và Google lập chỉ mục nhầm. Có tên miền riêng thì đổi
+   dòng này, hoặc chạy kèm SITE_URL=... */
+const SITE_URL = (process.env.SITE_URL || 'https://son290613-collab.github.io/trukuky-web').replace(/\/$/, '');
 const products = require('../data/products.json');
 const PHOTO_SIZES = require('../data/photo-sizes.json');
 
@@ -22,29 +27,61 @@ const ratioOf = (src) => {
   return (size ? size[0] / size[1] : DEFAULT_RATIO).toFixed(4);
 };
 
-/* Giá chưa được shop xác nhận không xuất hiện trên trang, metadata hoặc dữ
-   liệu có cấu trúc. Chỉ priceStatus="confirmed" mới mở luồng đặt hàng. */
-const isOrderable = (p) => p.priceStatus === 'confirmed'
+/* PHẢI khớp với isOrderableProduct() trong js/data.js — trang tĩnh sinh ở đây
+   và giao diện chạy bằng JS phải cùng một luật, nếu không sẽ có mẫu hiện nút
+   "Thêm vào giỏ" nhưng giỏ lại từ chối nhận.
+
+   "confirmed" = shop đã duyệt bảng giá. "live" = giá chính shop đọc công khai
+   trong livestream. Cả hai đặt hàng được vì website KHÔNG thu tiền — đơn chỉ
+   được soạn sẵn rồi khách gửi qua Messenger, shop chốt giá cuối.
+   "provisional" = số người làm web dựng tạm, shop chưa duyệt: không hiện giá,
+   không vào giỏ. Shop điền giá thật cho mẫu đó là nó tự mở giỏ hàng. */
+const ORDERABLE_PRICE_STATUS = ['confirmed', 'live'];
+const isOrderable = (p) => ORDERABLE_PRICE_STATUS.includes(p.priceStatus)
   && Number.isFinite(Number(p.price))
   && Number(p.price) > 0;
 const HAS_ORDERABLE_PRODUCTS = products.some(isOrderable);
+
+/* priceFrom = giá SÀN. Bỏ chữ "Từ" đi là biến giá rẻ nhất của mẫu thành giá
+   của mọi size — 14/42 mẫu dính bẫy này. */
+const isEstimatedPrice = (p) => p.priceFrom === true;
 const priceBlock = (p) => (isOrderable(p)
-  ? `<span class="price-value">${vnd(p.price)}</span>`
-  : (p.priceStatus === 'live' && Number(p.price) > 0
-    ? `<span class="price-value price-live">${p.priceFrom ? '<small>Từ</small> ' : ''}${vnd(p.price)}</span>`
-    : '<span class="price-on-request">Liên hệ xác nhận giá</span>'));
+  ? `<span class="price-value${p.priceStatus === 'live' ? ' price-live' : ''}">${isEstimatedPrice(p) ? '<small>Từ</small> ' : ''}${vnd(p.price)}</span>`
+  : '<span class="price-on-request">Liên hệ xác nhận giá</span>');
 
 /* Mẫu lấy từ buổi livestream: giá từng món, size còn theo sổ chốt đơn và link
    mở đúng đoạn live có mẫu này. Không bao giờ in tên khách hay số lượng tồn. */
+const dm = (iso) => { const [, m, d] = String(iso || '').split('-'); return d && m ? `${Number(d)}/${Number(m)}` : ''; };
+
+/* Bảng giá theo size — thông tin shop đã ghi lại trong sổ live (priceLines).
+   Trước đây khối này nằm lẫn trong phần giới thiệu live, TRÊN ô chọn size một
+   quãng dài; khách cuộn qua nó rồi bấm size mà không biết mỗi size một giá và
+   món nào đã hết. Giờ nó đứng ngay sát ô chọn size — đúng chỗ khách đang phải
+   ra quyết định. */
+const priceLinesBlock = (p) => {
+  const lines = (p.priceLines || []).map((l) => `<li>${esc(l)}</li>`).join('');
+  if (!lines) return '';
+  /* Cảnh báo "bộ nhiều món" chỉ đúng với bộ thật (đồ đôi mẹ&bé, hoặc tên mẫu
+     ghép hai món bằng dấu +). Mẫu một món nhưng hai mức giá theo size — như
+     áo khoác M24 — không phải bộ, gắn nhãn đó vào là nói sai với khách. */
+  const multi = (p.priceLines || []).length > 1
+    && ((p.sections || []).includes('matching') || /\+/.test(String(p.title || '')));
+  return `
+        <div class="pd-sizeprice">
+          <p class="pd-sizeprice-head">Giá và size còn theo sổ chốt đơn${p.live && p.live.stockAsOf ? ` <span>(rà ngày ${esc(dm(p.live.stockAsOf))})</span>` : ''}</p>
+          <ul>${lines}</ul>
+          <p class="pd-sizeprice-note">${multi ? 'Bộ này gồm nhiều món và mỗi món còn size khác nhau — đọc kỹ dòng của đúng món bạn cần. ' : ''}Shop xác nhận lại giá và size còn trước khi chốt đơn.</p>
+        </div>`;
+};
+
+/* Nguồn gốc mẫu: buổi live nào, link tới đúng đoạn video. Thuộc về phần
+   "tìm hiểu thêm", không phải phần ra quyết định mua. */
 const liveBlock = (p) => {
   if (!p.live) return '';
-  const dm = (iso) => { const [, m, d] = String(iso || '').split('-'); return d && m ? `${Number(d)}/${Number(m)}` : ''; };
-  const lines = (p.priceLines || []).map((l) => `<li>${esc(l)}</li>`).join('');
   return `
         <div class="pd-live">
           <p class="pd-live-head">Mẫu <b>${esc(p.live.code)}</b> trong buổi live ${esc(dm(p.live.date))}${p.live.relive ? ` · đã lên lại live ${esc(p.live.relive)}${p.live.reliveCode ? ` (mã ${esc(p.live.reliveCode)})` : ''}` : ''}</p>
-          ${lines ? `<ul>${lines}</ul>` : ''}
-          <p class="pd-live-note">Giá là giá shop niêm yết trong live. Size còn hàng lấy theo sổ chốt đơn${p.live.relive ? ` và các size bán ở live ${esc(p.live.relive)}` : ''} (rà ngày ${esc(dm(p.live.stockAsOf))}) — shop xác nhận lại trước khi chốt.${p.live.note ? ` ${esc(p.live.note)}.` : ''}</p>
+          ${p.live.note ? `<p class="pd-live-note">${esc(p.live.note)}.</p>` : ''}
           ${p.live.url ? `<a class="pd-live-link" href="${esc(p.live.url)}" target="_blank" rel="noopener">Xem đoạn live giới thiệu mẫu này ↗</a>` : ''}
           ${p.live.reliveUrl ? `<a class="pd-live-link" href="${esc(p.live.reliveUrl)}" target="_blank" rel="noopener">Xem đoạn live ${esc(p.live.relive)} ↗</a>` : ''}
         </div>`;
@@ -214,8 +251,8 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
 <link rel="stylesheet" href="../css/fonts.css?v=1">
 <link rel="stylesheet" href="../css/tokens.css?v=4">
 <link rel="stylesheet" href="../css/base.css?v=9">
-<link rel="stylesheet" href="../css/style.css?v=27">
-<link rel="stylesheet" href="../css/shop.css?v=7">
+<link rel="stylesheet" href="../css/style.css?v=28">
+<link rel="stylesheet" href="../css/shop.css?v=8">
 <script type="application/ld+json">${jsonLd(p)}</script>
 </head>
 <body>
@@ -240,6 +277,7 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
       <a href="../index.html#products">Mới về</a>
       <a href="../index.html#reels">Video</a>
       <a href="../index.html#collections">Bộ sưu tập</a>
+      <a href="../cham-soc-khach-hang.html">Chăm sóc khách hàng</a>
       <a href="../index.html#contact">Liên hệ</a>
     </nav>
     <div class="header-actions">
@@ -270,35 +308,45 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
         <h1>${esc(p.title)}</h1>
         <div class="pd-price">${priceBlock(p)}</div>
         <p class="pd-desc">${esc(desc)}</p>
-        ${liveBlock(p)}
-        ${inFrameBlock(p)}
-        ${reelBlock(p)}
-        ${siblingsOf(p).length ? `<div class="pd-siblings">
-          <h4>Cùng nằm trong khung ảnh này</h4>
-          <ul>${siblingsOf(p).map((x) => `<li><a href="${x.id}.html">${esc(x.title)}</a><span>${priceBlock(x)}</span></li>`).join('')}</ul>
-          <p>Ảnh được giữ nguyên khung, không cắt — từng món có mã riêng để hỏi shop.</p>
-        </div>` : ''}
+
+        <!-- Khối quyết định mua: giá → giá theo size → chọn size → thêm vào giỏ.
+             Bốn bước này phải đi liền nhau, không có video hay ảnh chen vào giữa.
+             Mọi thứ "tìm hiểu thêm" (clip, nguồn live, món chung khung ảnh) đã
+             được đẩy xuống dưới nút mua. -->
+        ${priceLinesBlock(p)}
 
         <div class="variant-picker" id="pdVariants" data-product="${p.id}">${variantHTML(p)}</div>
 
         <div class="pd-actions">
           ${isOrderable(p) ? `
           <button type="button" class="btn btn-primary btn-lg add-to-cart-btn" id="pdAddBtn" data-add-to-cart="${p.id}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
-            Thêm vào giỏ
-          </button>` : `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+            <span class="add-to-cart-label">Thêm vào giỏ</span>
+          </button>
+          <a href="../cart.html" class="btn btn-ghost-pink btn-lg" data-commerce-only>Xem giỏ hàng</a>` : `
           <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary btn-lg" id="pdConsultBtn" data-consult-product="${p.id}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A8 8 0 1 1 21 15Z"/></svg>
-            Nhắn hỏi mẫu ${p.id}
-          </a>`}
-          ${HAS_ORDERABLE_PRODUCTS ? '<a href="../cart.html" class="btn btn-ghost-pink btn-lg" data-commerce-only>Xem giỏ hàng</a>' : ''}
+            Hỏi giá mẫu ${p.id}
+          </a>
+          <p class="pd-noprice-note">Mẫu này chưa có bảng giá shop duyệt nên chưa đặt online được. Nhắn shop để biết giá và tình trạng hàng.</p>`}
         </div>
 
         <ul class="pd-trust">
-          <li><b>Giá và tình trạng hàng</b><span>Được shop xác nhận trực tiếp trước khi chốt</span></li>
-          <li><b>Tư vấn size</b><span>Gửi chiều cao, cân nặng và mã mẫu qua Messenger</span></li>
+          <li><b>Giá và tình trạng hàng</b><span>Shop xác nhận lại trước khi chốt đơn</span></li>
+          <li><b>Chọn đúng size</b><span>Gửi chiều cao, cân nặng và mã mẫu — shop tư vấn theo phom từng mẫu</span></li>
           <li><b>Xem tại cửa hàng</b><span>43 Lê Chân, Hải Phòng — nhắn Page trước khi ghé</span></li>
         </ul>
+        <p class="pd-care-link"><a href="../cham-soc-khach-hang.html">Bảng size, phí ship và đổi hàng — xem trang Chăm sóc khách hàng ↗</a></p>
+
+        <!-- Tìm hiểu thêm — đặt dưới nút mua có chủ đích. -->
+        ${reelBlock(p)}
+        ${liveBlock(p)}
+        ${inFrameBlock(p)}
+        ${siblingsOf(p).length ? `<div class="pd-siblings">
+          <h4>Cùng nằm trong khung ảnh này</h4>
+          <ul>${siblingsOf(p).map((x) => `<li><a href="${x.id}.html">${esc(x.title)}</a><span>${priceBlock(x)}</span></li>`).join('')}</ul>
+          <p>Ảnh được giữ nguyên khung, không cắt — từng món có mã riêng.</p>
+        </div>` : ''}
       </div>
     </div>
 
@@ -330,10 +378,11 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
     <div class="footer-col">
       <h4>Trợ giúp</h4>
       <ul>
-        <li><button type="button" data-info="size">Bảng size theo chiều cao</button></li>
+        <li><a href="../cham-soc-khach-hang.html">Chăm sóc khách hàng</a></li>
+        <li><a href="../cham-soc-khach-hang.html#chon-size">Bảng size theo chiều cao</a></li>
         <li><button type="button" data-info="order">Cách đặt hàng</button></li>
-        <li><button type="button" data-info="ship">Phí vận chuyển</button></li>
-        <li><button type="button" data-info="return">Đổi size &amp; đổi hàng</button></li>
+        <li><a href="../cham-soc-khach-hang.html#giao-nhan">Phí vận chuyển</a></li>
+        <li><a href="../cham-soc-khach-hang.html#doi-size">Đổi size &amp; đổi hàng</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -361,11 +410,11 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
   </div>
 </div>
 
-<script src="../js/data.js?v=14"></script>
-<script src="../js/ui.js?v=4"></script>
-<script src="../js/cart.js?v=2"></script>
+<script src="../js/data.js?v=16"></script>
+<script src="../js/ui.js?v=6"></script>
+<script src="../js/cart.js?v=5"></script>
 <script src="../js/analytics.js?v=1"></script>
-<script src="../js/product-page.js?v=2"></script>
+<script src="../js/product-page.js?v=3"></script>
 </body>
 </html>
 `;

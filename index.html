@@ -26,9 +26,56 @@
       imagesizes="(max-width: 900px) 92vw, 42vw" href="images/products/avif/p01-800.avif">
 <link rel="stylesheet" href="css/tokens.css?v=4">
 <link rel="stylesheet" href="css/base.css?v=9">
-<link rel="stylesheet" href="css/style.css?v=27">
-<link rel="stylesheet" href="css/shop.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=28">
+<link rel="stylesheet" href="css/shop.css?v=8">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"Trukuky","description":"Thời trang mẹ và bé gái tại Hải Phòng.","url":"https://son290613-collab.github.io/trukuky-web/","image":"https://son290613-collab.github.io/trukuky-web/images/products/p01.jpg","telephone":"+842256506669","address":{"@type":"PostalAddress","streetAddress":"43 Lê Chân","addressLocality":"Hải Phòng","addressCountry":"VN"},"sameAs":["https://www.facebook.com/trukuky"]}</script>
+<style>
+/* ==========================================================================
+   TRANG CHỦ — style bổ sung cho dải Chăm sóc khách hàng.
+   Đặt tại chỗ thay vì sửa css/style.css: dải này chỉ trang chủ dùng, và
+   css/style.css đang được các trang khác dùng chung. Mọi giá trị lấy từ
+   token có sẵn trong css/tokens.css để không lệch tông thương hiệu.
+   ========================================================================== */
+
+/* Menu chính có thêm mục "Chăm sóc khách hàng" — nhãn dài, nên thu khoảng
+   cách lại ở khoảng màn hình hẹp để hàng menu không tràn khỏi header. */
+@media (max-width: 1180px) { .main-nav { gap: var(--space-4); } }
+
+/* Dải Chăm sóc khách hàng: đặt SAU sản phẩm và bộ sưu tập, ngay trước khối
+   liên hệ — đây là thứ khách đọc khi đã chọn được mẫu và đang phân vân, chứ
+   không phải thứ chắn đường vào hàng mới. */
+.care-band { padding-block: var(--space-6); }
+.care-band-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-4);
+}
+.care-band-head h2 { font-size: var(--text-2xl); }
+.care-band-head p { color: var(--color-ink-soft); max-width: 48ch; margin-top: var(--space-2); }
+/* min(…, 100%): track không bao giờ rộng hơn khung cha, nên máy hẹp
+   (360px trở xuống) không bị cuộn ngang. */
+.care-band-grid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); }
+.care-band-card {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-4); background: var(--color-surface);
+  border: 1px solid var(--color-line); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+.care-band-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--color-line-strong); }
+.care-band-card b { font-size: var(--text-base); color: var(--color-ink); }
+.care-band-card span { font-size: var(--text-sm); color: var(--color-ink-soft); line-height: 1.55; }
+.care-band-card em { font-style: normal; font-weight: 700; font-size: var(--text-xs); color: var(--color-primary); margin-top: auto; }
+.care-band-icon {
+  width: 38px; height: 38px; border-radius: var(--radius-full);
+  background: var(--color-primary-tint); color: var(--color-primary);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.care-band-icon svg { width: 19px; height: 19px; }
+@media (prefers-reduced-motion: reduce) {
+  .care-band-card { transition: none; }
+  .care-band-card:hover { transform: none; }
+}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -61,6 +108,7 @@
       <a href="#products">Mới về</a>
       <a href="#reels">Video</a>
       <a href="#collections">Bộ sưu tập</a>
+      <a href="cham-soc-khach-hang.html">Chăm sóc khách hàng</a>
       <a href="#contact">Liên hệ</a>
     </nav>
     <div class="header-actions">
@@ -93,6 +141,7 @@
       <a href="#products">Mới về</a>
       <a href="#reels">Video</a>
       <a href="#collections">Bộ sưu tập</a>
+      <a href="cham-soc-khach-hang.html">Chăm sóc khách hàng</a>
       <a href="#contact">Liên hệ</a>
     </nav>
     <div class="mobile-drawer-sub">
@@ -191,6 +240,46 @@
     <div class="collection-showcase" id="collectionShowcase" aria-live="polite"></div>
   </section>
 
+  <!-- 04b · CHĂM SÓC KHÁCH HÀNG — dải gọn, bốn câu hỏi mẹ hay hỏi nhất.
+       Đặt SAU sản phẩm và bộ sưu tập nên không đẩy hàng mới xuống dưới; mỗi
+       thẻ là một lối vào thẳng đúng mục cần đọc, không bắt khách lướt cả trang. -->
+  <section class="section container care-band" id="cham-soc" aria-labelledby="careBandTitle">
+    <div class="care-band-head">
+      <div>
+        <span class="eyebrow">Trước khi đặt</span>
+        <h2 id="careBandTitle">Mẹ cần biết gì, shop nói rõ ở đây</h2>
+        <p>Chọn size, nhận hàng, đổi size — và một nút nhắn shop khi vẫn chưa yên tâm.</p>
+      </div>
+      <a href="cham-soc-khach-hang.html" class="btn btn-ghost-pink btn-sm">Trang Chăm sóc khách hàng</a>
+    </div>
+    <div class="care-band-grid">
+      <a class="care-band-card" href="cham-soc-khach-hang.html#chon-size">
+        <span class="care-band-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v8H3z"/><path d="M7 8v4M11 8v3M15 8v4M19 8v3"/></svg></span>
+        <b>Tư vấn size</b>
+        <span>Ba bảng tra theo chiều cao &amp; cân nặng: đồ bé, đồ đôi mẹ &amp; bé, và giày.</span>
+        <em>Xem bảng size →</em>
+      </a>
+      <a class="care-band-card" href="cham-soc-khach-hang.html#giao-nhan">
+        <span class="care-band-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></span>
+        <b>Giao nhận</b>
+        <span>Shop báo phí ship theo từng đơn trước khi gửi — hoặc bạn ghé lấy tại 43 Lê Chân.</span>
+        <em>Xem cách nhận hàng →</em>
+      </a>
+      <a class="care-band-card" href="cham-soc-khach-hang.html#doi-size">
+        <span class="care-band-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a8 8 0 0 1 13.7-5.7L21 8"/><path d="M21 4v4h-4"/><path d="M21 14a8 8 0 0 1-13.7 5.7L3 16"/><path d="M3 20v-4h4"/></svg></span>
+        <b>Đổi size</b>
+        <span>Bé mặc không vừa thì làm sao — shop xác nhận điều kiện ngay trong tin nhắn.</span>
+        <em>Xem cách đổi →</em>
+      </a>
+      <a class="care-band-card" href="https://m.me/trukuky" target="_blank" rel="noopener">
+        <span class="care-band-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A8 8 0 1 1 21 15Z"/></svg></span>
+        <b>Nhắn shop</b>
+        <span>Gửi mã mẫu kèm chiều cao, cân nặng của bé — Trukuky trả lời trên Messenger.</span>
+        <em>Mở Messenger →</em>
+      </a>
+    </div>
+  </section>
+
   <!-- 05 · TƯ VẤN & CỬA HÀNG — không thu dữ liệu khi giá chưa xác nhận -->
   <section class="section container" id="contact">
     <div class="story-section">
@@ -259,10 +348,11 @@
     <div class="footer-col">
       <h4>Trợ giúp</h4>
       <ul>
-        <li><button type="button" data-info="size">Bảng size theo chiều cao</button></li>
+        <li><a href="cham-soc-khach-hang.html">Chăm sóc khách hàng</a></li>
+        <li><a href="cham-soc-khach-hang.html#chon-size">Bảng size theo chiều cao</a></li>
         <li><button type="button" data-info="order">Cách đặt hàng</button></li>
-        <li><button type="button" data-info="ship">Phí vận chuyển</button></li>
-        <li><button type="button" data-info="return">Đổi size &amp; đổi hàng</button></li>
+        <li><a href="cham-soc-khach-hang.html#giao-nhan">Phí vận chuyển</a></li>
+        <li><a href="cham-soc-khach-hang.html#doi-size">Đổi size &amp; đổi hàng</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -326,10 +416,10 @@
   </div>
 </div>
 
-<script src="js/data.js?v=14"></script>
-<script src="js/ui.js?v=4"></script>
-<script src="js/cart.js?v=2"></script>
+<script src="js/data.js?v=16"></script>
+<script src="js/ui.js?v=6"></script>
+<script src="js/cart.js?v=5"></script>
 <script src="js/analytics.js?v=1"></script>
-<script src="js/main.js?v=20"></script>
+<script src="js/main.js?v=21"></script>
 </body>
 </html>

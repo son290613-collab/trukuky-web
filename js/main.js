@@ -64,11 +64,16 @@ let searchQuery = '';
 
 function currentProducts() {
   const q = normalizeText(searchQuery.trim());
-  return PRODUCTS.filter((p) => {
-    if (!matchesFilter(p, activeFilter)) return false;
-    if (!q) return true;
-    return normalizeText(`${p.title} ${p.desc || ''} ${(p.ages || []).join(' ')}`).includes(q);
-  });
+  /* Ô tìm kiếm quét TOÀN BỘ danh mục, không bị bó trong chip đang bật.
+     Trước đây chip mặc định là "Mẫu live còn size", nên khách gõ "balo" —
+     shop có ba chiếc — lại nhận về "Không tìm thấy sản phẩm nào" và bỏ đi.
+     Khách gõ chữ là đang hỏi "shop có cái này không?", câu trả lời phải lấy
+     từ cả kho hàng; chip chỉ còn tác dụng khi ô tìm kiếm đang trống. */
+  if (q) {
+    return PRODUCTS.filter((p) =>
+      normalizeText(`${p.title} ${p.desc || ''} ${(p.ages || []).join(' ')}`).includes(q));
+  }
+  return PRODUCTS.filter((p) => matchesFilter(p, activeFilter));
 }
 
 function renderChips() {
@@ -93,15 +98,22 @@ function renderGrid() {
       ? ''
       : ` trong “${PRODUCT_FILTERS.find((f) => f.key === activeFilter)?.label || EXTRA_FILTER_LABELS[activeFilter] || activeFilter}”`;
     const dangDao = activeFilter === 'all' && !searchQuery.trim();
+    /* Nói rõ kết quả trải khắp mọi danh mục, để khách không tưởng con số này
+       chỉ là phần nằm trong chip đang bật. */
     count.textContent = searchQuery.trim()
-      ? `${list.length} kết quả cho “${searchQuery.trim()}”${filterLabel}`
+      ? `${list.length} kết quả cho “${searchQuery.trim()}” trong toàn bộ danh mục`
       : dangDao && COLLECTIONS.length
         ? `${list.length} sản phẩm, xếp thành ${COLLECTIONS.length} bộ`
         : `${list.length} sản phẩm${filterLabel}`;
   }
 
   if (!list.length) {
-    grid.innerHTML = `<p class="grid-empty">Không tìm thấy sản phẩm nào. Thử bỏ bớt bộ lọc, hoặc <a href="https://m.me/trukuky" target="_blank" rel="noopener">nhắn Messenger</a> để Trukuky tìm giúp.</p>`;
+    /* Khi đang tìm kiếm, lưới rỗng nghĩa là cả kho không có mẫu nào khớp —
+       không phải do bộ lọc, nên đừng bảo khách "bỏ bớt bộ lọc". */
+    const goi = searchQuery.trim()
+      ? 'Cả danh mục chưa có mẫu nào khớp. Thử một từ khoá ngắn hơn, hoặc'
+      : 'Không tìm thấy sản phẩm nào. Thử bỏ bớt bộ lọc, hoặc';
+    grid.innerHTML = `<p class="grid-empty">${goi} <a href="https://m.me/trukuky" target="_blank" rel="noopener">nhắn Messenger</a> để Trukuky tìm giúp.</p>`;
     grid.classList.remove('is-collections');
     return;
   }
@@ -220,7 +232,11 @@ function initProductSection() {
       document.querySelectorAll('[data-search-input]').forEach((other) => {
         if (other !== input) other.value = input.value;
       });
-      renderGrid();
+      /* Đang tìm thì kết quả lấy từ cả kho, nên bỏ luôn chip đang bật —
+         nếu không dãy chip vẫn sáng "Mẫu live còn size" trong khi lưới bên
+         dưới đang hiện cả những mẫu không thuộc chip đó. */
+      if (searchQuery.trim() && activeFilter !== 'all') setFilter('all');
+      else renderGrid();
     });
   });
 
@@ -520,6 +536,13 @@ function initLightbox() {
   const close = () => {
     lightbox.classList.remove('is-open');
     document.documentElement.style.overflow = '';
+    /* Xoá size/màu vừa chọn. quickVariant là biến dùng chung: initConsultLinks
+       trong js/ui.js lấy nó làm phương án dự phòng cho mọi nút "Nhắn hỏi mẫu"
+       không mang sẵn data-size. Không xoá thì size chọn cho mẫu A còn nằm lại
+       và chui vào tin nhắn hỏi mẫu B — khách hỏi nhầm size. */
+    quickVariant = { size: '', color: '' };
+    quickProduct = null;
+    quickFrame = null;
   };
 
   document.addEventListener('click', (e) => {
@@ -777,13 +800,18 @@ document.addEventListener('DOMContentLoaded', () => {
   initConsultLinks();
   initCart();
   initTilt();
-  initHeroPhoto();
 
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
 productsReady.then(() => {
+  /* initHeroPhoto đọc PHOTO_SIZES, mà bảng này chỉ có sau khi loadProducts()
+     trong js/data.js fetch xong data/photo-sizes.json. Trước đây hàm được gọi
+     ở DOMContentLoaded — luôn chạy TRƯỚC lúc fetch trả về, nên PHOTO_SIZES
+     còn rỗng và việc thay ảnh hero không bao giờ xảy ra. Chờ đúng promise
+     productsReady, giống các trang khác. */
+  initHeroPhoto();
   initProductSection();
   renderFeatured();
   renderCollectionShowcase();

@@ -126,59 +126,100 @@ function productCardHTML(p) {
 }
 
 /* ---------- Bảng size & thông tin mua hàng ---------- */
+/* Trang Chăm sóc khách hàng nằm ở gốc site, nhưng ui.js còn chạy ở /p/*.html —
+   nên đường dẫn phải quy về gốc bằng assetUrl, không ghi tương đối. */
+function careUrl(hash) {
+  const base = typeof assetUrl === 'function'
+    ? assetUrl('cham-soc-khach-hang.html')
+    : 'cham-soc-khach-hang.html';
+  return hash ? base + hash : base;
+}
+
+/* Bảng "giày" trong SIZE_GUIDES còn một cột cuối bỏ trống từ dữ liệu vận hành
+   cũ. Cắt mọi cột rỗng hoàn toàn trước khi vẽ: một cột trắng không nói thêm
+   điều gì, chỉ kéo bảng rộng ra và bắt khách cuộn ngang trên điện thoại. */
 function sizeTableHTML(guide) {
+  const keep = guide.head
+    .map((h, i) => (String(h || '').trim() !== '' || guide.rows.some((r) => String(r[i] || '').trim() !== '')))
+    .map((used, i) => (used ? i : -1))
+    .filter((i) => i >= 0);
   return `
   <h4>${guide.title}</h4>
   <div class="table-wrap">
     <table class="size-table">
-      <thead><tr>${guide.head.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
-      <tbody>${guide.rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+      <thead><tr>${keep.map((i) => `<th>${guide.head[i]}</th>`).join('')}</tr></thead>
+      <tbody>${guide.rows.map((r) => `<tr>${keep.map((i) => `<td>${r[i] == null ? '' : r[i]}</td>`).join('')}</tr>`).join('')}</tbody>
     </table>
   </div>
   <p class="modal-note">${guide.note}</p>`;
 }
 
+/* Modal thông tin ở footer mọi trang.
+   Đây là chỗ khách mở ra ĐÚNG lúc đang cân nhắc bấm mua. Bản cũ trả lời cả
+   bốn câu hỏi bằng "đang chờ Trukuky xác nhận" — đọc xong thì người ta đóng
+   tab, vì nghe như một cửa hàng chưa mở. Nên các mục dưới đây nói ngắn, ấm và
+   có việc để làm ngay, rồi dẫn sang trang Chăm sóc khách hàng để xem đầy đủ.
+   Vẫn giữ nguyên nguyên tắc: KHÔNG nêu phí ship, thời gian giao hay số ngày
+   đổi trả như một con số chắc chắn khi shop chưa chốt. */
 const INFO_CONTENT = {
   size: {
-    title: 'Tư vấn size Trukuky',
+    title: 'Chọn size cho bé',
     body: () => `
-      <p><b>Bảng quy đổi chiều cao, cân nặng và số đo chính thức đang chờ Trukuky xác nhận.</b> Website không dùng một bảng size chung để chốt size thay cho shop.</p>
+      <p>Trukuky chọn size theo <b>chiều cao</b> và <b>cân nặng</b> của bé, không theo tuổi — hai bé cùng 5 tuổi có thể cách nhau cả một size.</p>
       <ol class="steps">
-        <li>Gửi mã mẫu bạn đang xem.</li>
-        <li>Cho shop biết chiều cao, cân nặng và độ tuổi của bé; với giày, gửi chiều dài bàn chân.</li>
-        <li>Trukuky đối chiếu đúng phom của mẫu và xác nhận size trước khi chốt.</li>
+        <li>Tra nhanh trong <a href="${careUrl('#chon-size')}">ba bảng size theo chiều cao &amp; cân nặng</a>: đồ bé, đồ đôi mẹ &amp; bé, và giày.</li>
+        <li>Nhắn shop chiều cao, cân nặng kèm mã mẫu bạn đang xem. Nếu là giày, đo thêm chiều dài bàn chân.</li>
+        <li>Shop đối chiếu đúng phom của mẫu đó rồi xác nhận size trước khi gửi hàng.</li>
       </ol>
-      <p class="modal-note">Các nút size trên trang là lựa chọn dự kiến từ dữ liệu catalogue, không phải cam kết vừa vặn. <a href="${STORE_MESSENGER}" target="_blank" rel="noopener">Nhắn Trukuky tư vấn size</a>.</p>`,
+      <p class="modal-note">Bảng size là bảng tham khảo, không phải cam kết vừa vặn — mỗi mẫu một phom nên shop luôn chốt lại size theo từng món. <a href="${careUrl('#chon-size')}">Xem chi tiết ở trang Chăm sóc khách hàng</a> hoặc <a href="${STORE_MESSENGER}" target="_blank" rel="noopener">nhắn Trukuky</a>.</p>`,
   },
   price: {
     title: 'Giá sản phẩm',
     body: () => `
-      <p>Website chỉ hiển thị giá khi bảng giá đã được Trukuky xác nhận. Mẫu chưa đủ dữ liệu sẽ không thể thêm vào giỏ hay gửi đơn.</p>
-      <p class="modal-note">Nhắn <a href="${STORE_MESSENGER}" target="_blank" rel="noopener">Messenger</a> với mã mẫu để shop xác nhận giá, size và tình trạng hàng.</p>`,
+      <p>Website chỉ hiện giá khi Trukuky đã chốt con số đó — giá shop niêm yết trong buổi livestream, hoặc giá đã được shop xác nhận. Mẫu chưa có giá chốt sẽ ghi “Liên hệ xác nhận giá” chứ không hiện một con số dựng tạm.</p>
+      <p>Một số mẫu hiện “<b>Từ</b> …₫”: đó là giá của size nhỏ nhất, vì đồ đôi mẹ &amp; bé và giày thường mỗi size một giá. Shop báo đúng giá theo size bạn chọn khi xác nhận đơn.</p>
+      <p>Phí giao hàng tính riêng, shop báo theo từng đơn.</p>
+      <p class="modal-note">Nhắn <a href="${STORE_MESSENGER}" target="_blank" rel="noopener">Messenger</a> kèm mã mẫu để shop xác nhận giá cuối, size còn hàng và cách giao. <a href="${careUrl('#giao-nhan')}">Xem cách nhận hàng</a>.</p>`,
   },
   order: {
     title: 'Cách đặt hàng',
     body: () => hasOrderableProducts() ? `
-      <ol class="steps"><li>Chọn mẫu, size và màu.</li><li>Kiểm tra giỏ hàng.</li><li>Gửi thông tin giao hàng.</li><li>Trukuky xác nhận đơn trước khi giao.</li></ol>` : `
+      <ol class="steps">
+        <li><b>Chọn mẫu và size</b> — mở mẫu bạn thích, chọn size (và màu nếu mẫu có nhiều màu).</li>
+        <li><b>Thêm vào giỏ</b> — gom nhiều món trong một lần cũng được.</li>
+        <li><b>Gửi đơn qua Messenger</b> — mở giỏ hàng rồi bấm “Gửi đơn cho shop”; website soạn sẵn nội dung đơn ngay trên máy bạn để bạn dán vào khung chat.</li>
+        <li><b>Shop xác nhận</b> giá cuối, size còn hàng và phí giao, rồi mới chốt đơn.</li>
+      </ol>
+      <p class="modal-note">Website không tự gửi và không lưu thông tin của bạn — đơn chỉ đi khi chính bạn bấm gửi trong Messenger. Chưa chắc size? <a href="${careUrl('#chon-size')}">Xem hướng dẫn chọn size</a> trước khi thêm vào giỏ.</p>` : `
       <ol class="steps">
         <li><b>Mở mẫu bạn quan tâm</b> và xem các góc ảnh hiện có.</li>
         <li><b>Chọn size, màu dự kiến</b> để cuộc tư vấn nhanh hơn.</li>
         <li><b>Bấm “Nhắn hỏi mẫu”</b>; website sẽ sao chép mã mẫu để bạn dán vào Messenger.</li>
         <li><b>Shop xác nhận</b> giá, size, tình trạng hàng và cách giao trước khi chốt đơn.</li>
       </ol>
-      <p class="modal-note">Website tạm không thu thập họ tên, số điện thoại hay địa chỉ khi giá chưa được xác nhận.</p>`,
+      <p class="modal-note">Cần chọn size trước? <a href="${careUrl('#chon-size')}">Xem hướng dẫn chọn size ở trang Chăm sóc khách hàng</a>.</p>`,
   },
   ship: {
     title: 'Giao nhận &amp; phí vận chuyển',
     body: () => `
-      <p>Phạm vi giao hàng, thời gian dự kiến, đơn vị vận chuyển, phí giao và phương thức thanh toán cần được Trukuky xác nhận theo từng đơn.</p>
-      <p class="modal-note">Website chưa công bố một chính sách giao nhận chính thức. Vui lòng <a href="${STORE_MESSENGER}" target="_blank" rel="noopener">nhắn Fanpage</a> với địa chỉ nhận dự kiến để shop báo phương án phù hợp trước khi chốt.</p>`,
+      <p>Trukuky báo phí ship theo từng đơn, vì tuỳ địa chỉ nhận và số món mà chi phí mỗi đơn một khác. Shop báo trước, bạn đồng ý rồi shop mới gửi hàng.</p>
+      <ol class="steps">
+        <li>Gửi đơn kèm địa chỉ nhận qua Messenger.</li>
+        <li>Shop báo lại phí ship, đơn vị giao và thời gian dự kiến cho đúng đơn đó.</li>
+        <li>Bạn xác nhận thì shop đóng gói và gửi đi.</li>
+      </ol>
+      <p class="modal-note">Ở gần 43 Lê Chân thì có thể tới lấy trực tiếp, cho bé thử rồi mới quyết định. <a href="${careUrl('#giao-nhan')}">Xem chi tiết ở trang Chăm sóc khách hàng</a>.</p>`,
   },
   return: {
     title: 'Đổi size &amp; đổi hàng',
     body: () => `
-      <p>Thời hạn, điều kiện, chi phí và các trường hợp không áp dụng đổi hàng đang chờ Trukuky phê duyệt thành chính sách chính thức.</p>
-      <p class="modal-note">Trước khi đặt, hãy <a href="${STORE_MESSENGER}" target="_blank" rel="noopener">nhắn Trukuky</a> để shop xác nhận chính sách áp dụng cho mẫu cụ thể. Website không tự đưa ra cam kết đổi trả khi chưa có phê duyệt.</p>`,
+      <p>Điều kiện đổi được shop xác nhận ngay trong tin nhắn <b>trước khi bạn chốt đơn</b> — để hai bên cùng rõ từ đầu, thay vì hứa một con số rồi làm khác.</p>
+      <ol class="steps">
+        <li>Trước khi chốt, hỏi thẳng “mẫu này đổi size được không” kèm mã mẫu.</li>
+        <li>Giữ lại tem, mác và túi đựng cho tới khi bé mặc thử xong.</li>
+        <li>Nếu không vừa, nhắn lại đúng đoạn chat cũ kèm ảnh để shop hướng dẫn.</li>
+      </ol>
+      <p class="modal-note">Đỡ nhất là không phải đổi: gửi chiều cao và cân nặng của bé để shop chốt size giúp. <a href="${careUrl('#doi-size')}">Xem chi tiết ở trang Chăm sóc khách hàng</a>.</p>`,
   },
 };
 

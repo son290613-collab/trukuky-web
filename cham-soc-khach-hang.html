@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chăm sóc khách hàng — Trukuky</title>
+<link rel="canonical" href="https://son290613-collab.github.io/trukuky-web/cham-soc-khach-hang.html">
+<meta name="description" content="Liên hệ Trukuky, hướng dẫn chọn size cho bé theo chiều cao &amp; cân nặng, cách nhận hàng và cách đổi size. Thời trang mẹ &amp; bé gái, 43 Lê Chân, Hải Phòng.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Trukuky">
+<meta property="og:title" content="Chăm sóc khách hàng — Trukuky">
+<meta property="og:description" content="Chọn đúng size cho bé, biết trước cách nhận hàng và cách đổi size. Có gì chưa rõ, nhắn shop một câu là được.">
+<meta property="og:url" content="https://son290613-collab.github.io/trukuky-web/cham-soc-khach-hang.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%238A2F50'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23fff' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/fraunces-roman.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bvp-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bvp-400-vietnamese.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css?v=1">
+<link rel="stylesheet" href="css/tokens.css?v=4">
+<link rel="stylesheet" href="css/base.css?v=9">
+<link rel="stylesheet" href="css/style.css?v=28">
+<link rel="stylesheet" href="css/shop.css?v=8">
+<style>
+/* ==========================================================================
+   CHĂM SÓC KHÁCH HÀNG — style riêng của trang này.
+   Đặt tại chỗ (không sửa css/style.css) vì đây là bố cục chỉ trang này dùng;
+   nhét vào file dùng chung sẽ bắt mọi trang khác tải thêm mà không dùng tới.
+   Mọi màu, khoảng cách đều lấy từ token có sẵn để trang không lệch tông.
+   ========================================================================== */
+
+.care-hero { max-width: 700px; }
+.care-hero h1 { font-size: var(--text-3xl); margin-bottom: var(--space-3); }
+.care-hero p { color: var(--color-ink-soft); max-width: 54ch; }
+
+/* Mục lục nhảy nhanh — mẹ đang vội thường chỉ cần đúng một mục. */
+.care-jump { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+.care-jump a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.05rem;
+  border-radius: var(--radius-full); background: var(--color-surface);
+  border: 1px solid var(--color-line); box-shadow: var(--shadow-sm);
+  font-size: var(--text-sm); font-weight: 600; color: var(--color-ink);
+}
+.care-jump a:hover { border-color: var(--color-line-strong); background: var(--color-primary-tint); color: var(--color-primary); }
+
+/* Neo cuộn phải trừ chiều cao header dính, nếu không tiêu đề bị che. */
+.care-section { scroll-margin-top: calc(var(--header-height) + var(--space-4)); padding-block: var(--space-6); }
+.care-section > .section-head { margin-bottom: var(--space-4); }
+.care-section h2 { font-size: var(--text-2xl); }
+
+.care-card {
+  background: var(--color-surface); border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg); padding: var(--space-5); box-shadow: var(--shadow-sm);
+}
+@media (max-width: 480px) { .care-card { padding: var(--space-4); border-radius: var(--radius-md); } }
+.care-card > * + * { margin-top: var(--space-3); }
+.care-card p { color: var(--color-ink-soft); max-width: 62ch; }
+.care-card h3 { font-size: var(--text-lg); color: var(--color-ink); }
+
+/* Chip nói rõ "cái này shop chốt theo từng đơn" — một sự thật về cách làm
+   việc, không phải lời xin lỗi vì web chưa xong. */
+.care-chip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: 0.35rem 0.85rem; border-radius: var(--radius-full);
+  background: var(--color-gold-tint); color: var(--color-gold);
+  font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.01em;
+}
+.care-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* Khối nhấn mạnh: phom mỗi mẫu một khác nên shop vẫn chốt size lại. */
+.care-note {
+  border-left: 3px solid var(--color-primary); background: var(--color-primary-tint);
+  border-radius: var(--radius-md); padding: var(--space-4);
+}
+.care-note b { color: var(--color-primary); }
+.care-note p { color: var(--color-ink); margin: 0; }
+
+.care-steps { margin-bottom: 0; }
+.care-steps li { font-size: var(--text-base); }
+
+/* Liên hệ: nút Messenger to nhất trang — đây là việc khách hay cần nhất. */
+.care-contact { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+/* minmax(0,1fr) chứ không phải 1fr trần: ô lưới mặc định có min-width:auto,
+   nên một track "1fr" vẫn bị nội dung dài nhất bên trong (nút Messenger,
+   số điện thoại) nong rộng ra quá khung cha. Ở màn 360px điều đó đẩy cả
+   trang cuộn ngang 6px. minmax(0,…) cho phép track co lại đúng khung. */
+@media (max-width: 860px) { .care-contact { grid-template-columns: minmax(0, 1fr); } }
+.care-contact-main { display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
+.care-contact-main .btn-lg { width: 100%; }
+.care-contact-main .btn-lg, .care-end .btn { max-width: 100%; white-space: normal; }
+@media (min-width: 520px) { .care-contact-main .btn-lg { width: auto; } }
+.care-contact-rows { display: flex; flex-direction: column; gap: var(--space-4); }
+.care-contact-rows a { color: var(--color-primary); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.care-contact-rows p { color: var(--color-ink-soft); font-size: var(--text-sm); margin: 0; }
+
+/* min(…, 100%) thay vì 300px trần: ở màn 360px khung cha chỉ còn ~280px,
+   một track cứng 300px sẽ đẩy cả trang cuộn ngang. */
+.care-sizetables { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+.care-sizetable { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: var(--space-4); }
+.care-sizetable h4 { font-size: var(--text-base); margin-bottom: var(--space-3); color: var(--color-ink); }
+/* .table-wrap tự cuộn ngang bên trong thẻ, nên bảng rộng không kéo cả trang. */
+.care-sizetable .table-wrap { margin-bottom: var(--space-2); }
+
+.care-aside { background: var(--color-bg-soft); border-radius: var(--radius-md); padding: var(--space-4); }
+.care-aside h3 { font-size: var(--text-base); margin-bottom: var(--space-2); }
+.care-aside p { margin: 0; font-size: var(--text-sm); }
+
+/* Khối kết: một câu hỏi và một nút. Không hỏi thêm thông tin gì của khách. */
+.care-end { text-align: center; background: var(--color-primary); color: var(--color-bg); border-radius: var(--radius-lg); padding: var(--space-6) var(--space-4); }
+.care-end h2 { color: var(--color-bg); font-size: var(--text-2xl); margin-bottom: var(--space-2); }
+.care-end p { color: rgba(253, 241, 238, 0.82); max-width: 46ch; margin: 0 auto var(--space-4); }
+.care-end .btn-primary { background: var(--color-bg); color: var(--color-primary); border-color: transparent; box-shadow: none; }
+.care-end .btn-primary:hover:not(:disabled) { background: #fff; color: var(--color-primary-hover); }
+.care-end-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); justify-content: center; margin-top: var(--space-4); }
+.care-end-links a { color: rgba(253, 241, 238, 0.9); font-size: var(--text-sm); text-decoration: underline; text-underline-offset: 3px; min-height: 44px; display: inline-flex; align-items: center; }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Bỏ qua đến nội dung chính</a>
+
+<!-- HEADER — giống hệt trang chủ để khách không thấy mình bị dẫn đi đâu khác -->
+<header class="site-header is-scrolled">
+  <div class="container header-inner">
+    <a href="index.html" class="header-logo" aria-label="Trukuky — Trang chủ">
+      <svg class="logo-mark" viewBox="-232.8 -1693.5 11728.8 1979.5" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Trukuky">
+        <g fill="currentColor">
+        <path d="M243 -1400H1003Q1029 -1400 1049 -1408Q1069 -1416 1085 -1423Q1101 -1431 1112 -1431Q1131 -1431 1141 -1420Q1151 -1410 1156 -1381L1219 -1047Q1224 -1028 1218 -1016Q1211 -1004 1198 -1000Q1185 -997 1174 -1003Q1163 -1009 1157 -1027Q1105 -1155 1063 -1222Q1020 -1289 979 -1311Q937 -1333 890 -1333H764V-123Q764 -105 775 -94Q785 -83 808 -77L882 -64Q911 -55 911 -30Q911 0 874 0H375Q358 0 349 -8Q340 -16 340 -31Q340 -55 367 -64L442 -77Q464 -83 474 -94Q484 -105 484 -123V-1333H356Q311 -1333 270 -1309Q230 -1285 187 -1218Q145 -1152 93 -1027Q86 -1009 76 -1003Q65 -997 51 -1000Q39 -1004 33 -1016Q27 -1028 31 -1047L92 -1382Q98 -1410 108 -1421Q119 -1432 136 -1432Q147 -1432 163 -1424Q179 -1416 198 -1408Q217 -1400 243 -1400Z"/>
+        <path d="M2799 -915Q2799 -816 2758 -737Q2716 -657 2640 -604Q2564 -550 2461 -532Q2431 -526 2406 -521Q2380 -516 2353 -513Q2325 -510 2288 -510Q2220 -510 2165 -519Q2110 -528 2066 -545Q2021 -562 1986 -588L1993 -646Q2028 -621 2066 -607Q2104 -593 2145 -588Q2185 -582 2226 -582Q2360 -582 2438 -664Q2517 -746 2517 -909Q2517 -1032 2469 -1128Q2420 -1224 2335 -1279Q2249 -1334 2138 -1334H2051V-132Q2051 -108 2061 -96Q2071 -84 2094 -78L2161 -64Q2177 -60 2183 -51Q2190 -43 2190 -30Q2190 0 2154 0H1669Q1652 0 1643 -8Q1633 -16 1633 -30Q1633 -55 1661 -64L1728 -77Q1750 -85 1761 -97Q1772 -108 1772 -132V-1277Q1772 -1295 1761 -1306Q1751 -1316 1728 -1323L1661 -1336Q1633 -1345 1633 -1370Q1633 -1383 1643 -1392Q1652 -1400 1669 -1400H2144Q2351 -1400 2498 -1339Q2645 -1277 2722 -1168Q2799 -1058 2799 -915ZM2259 -550 2523 -581 2785 -130Q2805 -99 2825 -86Q2845 -73 2876 -64Q2893 -60 2900 -52Q2907 -44 2907 -30Q2907 -17 2899 -8Q2891 0 2872 0H2448Q2412 0 2412 -30Q2412 -40 2418 -47Q2423 -53 2434 -57L2476 -66Q2497 -73 2502 -87Q2506 -101 2490 -129Z"/>
+        <path d="M4332 -604 4295 -1212Q4291 -1258 4272 -1283Q4253 -1308 4209 -1320L4146 -1334Q4129 -1339 4121 -1347Q4113 -1355 4113 -1369Q4113 -1383 4122 -1392Q4131 -1400 4146 -1400H4506Q4522 -1400 4531 -1392Q4540 -1383 4540 -1369Q4540 -1355 4531 -1347Q4522 -1339 4506 -1334L4449 -1319Q4409 -1308 4387 -1279Q4365 -1251 4368 -1208L4403 -611Q4406 -559 4409 -508Q4412 -457 4412 -403Q4413 -282 4363 -185Q4312 -88 4204 -32Q4095 24 3925 24Q3745 24 3626 -28Q3507 -81 3448 -175Q3389 -268 3390 -392Q3390 -420 3392 -465Q3395 -509 3398 -556Q3401 -602 3402 -640L3440 -1276Q3441 -1297 3431 -1307Q3420 -1318 3397 -1322L3326 -1334Q3292 -1342 3292 -1369Q3292 -1383 3301 -1392Q3310 -1400 3327 -1400H3831Q3848 -1400 3857 -1392Q3866 -1383 3866 -1369Q3866 -1355 3858 -1346Q3849 -1338 3831 -1334L3760 -1322Q3740 -1319 3730 -1308Q3720 -1297 3718 -1276L3682 -642Q3677 -569 3676 -510Q3675 -450 3675 -406Q3674 -228 3758 -142Q3841 -55 3988 -55Q4097 -55 4176 -97Q4255 -139 4298 -217Q4341 -295 4340 -402Q4340 -467 4338 -514Q4336 -561 4332 -604Z"/>
+        <path d="M5297 -517 5864 -1149Q5904 -1188 5914 -1224Q5924 -1261 5910 -1288Q5896 -1315 5858 -1327L5807 -1335Q5793 -1342 5787 -1349Q5780 -1357 5780 -1370Q5780 -1384 5789 -1392Q5798 -1400 5815 -1400H6203Q6220 -1400 6229 -1392Q6238 -1383 6238 -1369Q6238 -1356 6229 -1348Q6219 -1340 6200 -1334Q6176 -1326 6152 -1313Q6127 -1300 6099 -1280Q6070 -1259 6032 -1224Q5995 -1190 5944 -1138L5321 -456ZM5523 -742 5726 -933 6170 -145Q6191 -109 6212 -91Q6233 -74 6268 -68Q6285 -62 6292 -54Q6300 -45 6300 -31Q6300 -16 6291 -8Q6281 0 6263 0H5796Q5778 0 5770 -8Q5762 -17 5762 -31Q5762 -44 5769 -51Q5775 -58 5786 -64L5849 -74Q5867 -78 5871 -93Q5874 -107 5856 -141ZM5371 -125Q5371 -106 5382 -95Q5392 -84 5414 -77L5482 -64Q5497 -60 5504 -52Q5510 -44 5510 -30Q5510 -16 5501 -8Q5492 0 5474 0H4989Q4972 0 4963 -8Q4953 -16 4953 -30Q4953 -55 4981 -64L5050 -77Q5071 -84 5081 -95Q5092 -106 5092 -125V-1277Q5092 -1295 5081 -1306Q5071 -1316 5050 -1323L4981 -1336Q4953 -1345 4953 -1370Q4953 -1383 4963 -1392Q4972 -1400 4989 -1400H5474Q5492 -1400 5501 -1392Q5510 -1383 5510 -1370Q5510 -1345 5483 -1336L5414 -1323Q5393 -1316 5382 -1306Q5371 -1295 5371 -1277Z"/>
+        <path d="M7719 -604 7682 -1212Q7678 -1258 7659 -1283Q7640 -1308 7596 -1320L7533 -1334Q7516 -1339 7508 -1347Q7500 -1355 7500 -1369Q7500 -1383 7509 -1392Q7518 -1400 7533 -1400H7893Q7909 -1400 7918 -1392Q7927 -1383 7927 -1369Q7927 -1355 7918 -1347Q7909 -1339 7893 -1334L7836 -1319Q7796 -1308 7774 -1279Q7752 -1251 7755 -1208L7790 -611Q7793 -559 7796 -508Q7799 -457 7799 -403Q7800 -282 7750 -185Q7699 -88 7591 -32Q7482 24 7312 24Q7132 24 7013 -28Q6894 -81 6835 -175Q6776 -268 6777 -392Q6777 -420 6779 -465Q6782 -509 6785 -556Q6788 -602 6789 -640L6827 -1276Q6828 -1297 6818 -1307Q6807 -1318 6784 -1322L6713 -1334Q6679 -1342 6679 -1369Q6679 -1383 6688 -1392Q6697 -1400 6714 -1400H7218Q7235 -1400 7244 -1392Q7253 -1383 7253 -1369Q7253 -1355 7245 -1346Q7236 -1338 7218 -1334L7147 -1322Q7127 -1319 7117 -1308Q7107 -1297 7105 -1276L7069 -642Q7064 -569 7063 -510Q7062 -450 7062 -406Q7061 -228 7145 -142Q7228 -55 7375 -55Q7484 -55 7563 -97Q7642 -139 7685 -217Q7728 -295 7727 -402Q7727 -467 7725 -514Q7723 -561 7719 -604Z"/>
+        <path d="M8684 -517 9251 -1149Q9291 -1188 9301 -1224Q9311 -1261 9297 -1288Q9283 -1315 9245 -1327L9194 -1335Q9180 -1342 9174 -1349Q9167 -1357 9167 -1370Q9167 -1384 9176 -1392Q9185 -1400 9202 -1400H9590Q9607 -1400 9616 -1392Q9625 -1383 9625 -1369Q9625 -1356 9616 -1348Q9606 -1340 9587 -1334Q9563 -1326 9539 -1313Q9514 -1300 9486 -1280Q9457 -1259 9419 -1224Q9382 -1190 9331 -1138L8708 -456ZM8910 -742 9113 -933 9557 -145Q9578 -109 9599 -91Q9620 -74 9655 -68Q9672 -62 9679 -54Q9687 -45 9687 -31Q9687 -16 9678 -8Q9668 0 9650 0H9183Q9165 0 9157 -8Q9149 -17 9149 -31Q9149 -44 9156 -51Q9162 -58 9173 -64L9236 -74Q9254 -78 9258 -93Q9261 -107 9243 -141ZM8758 -125Q8758 -106 8769 -95Q8779 -84 8801 -77L8869 -64Q8884 -60 8891 -52Q8897 -44 8897 -30Q8897 -16 8888 -8Q8879 0 8861 0H8376Q8359 0 8350 -8Q8340 -16 8340 -30Q8340 -55 8368 -64L8437 -77Q8458 -84 8468 -95Q8479 -106 8479 -125V-1277Q8479 -1295 8468 -1306Q8458 -1316 8437 -1323L8368 -1336Q8340 -1345 8340 -1370Q8340 -1383 8350 -1392Q8359 -1400 8376 -1400H8861Q8879 -1400 8888 -1392Q8897 -1383 8897 -1370Q8897 -1345 8870 -1336L8801 -1323Q8780 -1316 8769 -1306Q8758 -1295 8758 -1277Z"/>
+        <path d="M10754 -471 10514 -439 10138 -1273Q10124 -1301 10111 -1312Q10098 -1323 10080 -1328L10043 -1337Q10029 -1342 10023 -1350Q10016 -1358 10016 -1370Q10016 -1384 10025 -1392Q10034 -1400 10053 -1400H10514Q10532 -1400 10542 -1392Q10552 -1384 10552 -1370Q10552 -1346 10521 -1335L10460 -1326Q10429 -1318 10425 -1307Q10421 -1297 10432 -1270L10761 -533L10694 -503L10995 -1194Q11015 -1242 10999 -1277Q10982 -1312 10928 -1327L10888 -1337Q10876 -1342 10871 -1350Q10865 -1357 10865 -1369Q10865 -1384 10873 -1392Q10882 -1400 10900 -1400H11198Q11217 -1400 11225 -1392Q11234 -1383 11234 -1369Q11234 -1358 11229 -1350Q11224 -1342 11210 -1337L11190 -1331Q11163 -1322 11142 -1305Q11120 -1288 11103 -1260Q11085 -1232 11066 -1188ZM10490 -517 10769 -524V-124Q10769 -104 10780 -94Q10790 -83 10813 -77L10880 -64Q10909 -54 10909 -31Q10909 -16 10899 -8Q10890 0 10872 0H10387Q10370 0 10361 -8Q10352 -16 10352 -30Q10352 -55 10379 -64L10449 -77Q10471 -84 10480 -95Q10490 -105 10490 -124Z"/>
+        </g>
+      </svg>
+    </a>
+    <nav class="main-nav" aria-label="Chính">
+      <a href="index.html#new">Mới về</a>
+      <a href="index.html#reels">Video</a>
+      <a href="index.html#collections">Bộ sưu tập</a>
+      <a href="cham-soc-khach-hang.html" aria-current="page">Chăm sóc khách hàng</a>
+    </nav>
+    <div class="header-actions">
+      <a href="cart.html" class="icon-btn" aria-label="Giỏ hàng" data-commerce-only hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        <span class="cart-badge" data-cart-badge>0</span>
+      </a>
+      <button type="button" class="menu-toggle" aria-label="Mở menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-drawer">
+  <div class="mobile-drawer-scrim"></div>
+  <div class="mobile-drawer-panel">
+    <button type="button" class="mobile-drawer-close" aria-label="Đóng menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <nav class="mobile-drawer-nav">
+      <a href="index.html#new">Mới về</a>
+      <a href="index.html#reels">Video</a>
+      <a href="index.html#collections">Bộ sưu tập</a>
+      <a href="cham-soc-khach-hang.html" aria-current="page">Chăm sóc khách hàng</a>
+    </nav>
+    <div class="mobile-drawer-sub">
+      <a href="#chon-size">Bảng size</a>
+      <a href="https://www.facebook.com/trukuky" target="_blank" rel="noopener">Fanpage Facebook</a>
+    </div>
+    <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Nhắn Trukuky tư vấn</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <div class="container page-hero care-hero">
+    <span class="eyebrow">Chăm sóc khách hàng</span>
+    <h1>Trukuky ở đây để mẹ chọn cho đúng</h1>
+    <p>Bốn điều mẹ hay cần biết nhất trước khi đặt: liên hệ shop thế nào, chọn size ra sao, nhận hàng kiểu gì và nếu không vừa thì làm thế nào. Đọc mục nào cần thôi cũng được.</p>
+    <nav class="care-jump" aria-label="Đi nhanh tới mục">
+      <a href="#lien-he">Liên hệ &amp; giờ mở cửa</a>
+      <a href="#chon-size">Hướng dẫn chọn size</a>
+      <a href="#giao-nhan">Phí ship &amp; nhận hàng</a>
+      <a href="#doi-size">Đổi size &amp; đổi hàng</a>
+    </nav>
+  </div>
+
+  <!-- 01 · LIÊN HỆ — đặt đầu tiên: khách đang lo thì cần người trả lời trước đã -->
+  <section class="section container care-section" id="lien-he">
+    <div class="section-head">
+      <span class="eyebrow">01 · Liên hệ</span>
+      <h2>Nhắn một câu là có người trả lời</h2>
+    </div>
+    <div class="care-card" id="careContact">
+      <p>Đang tải thông tin liên hệ…</p>
+    </div>
+  </section>
+
+  <!-- 02 · SIZE — khối quan trọng nhất: sai size là lý do đổi hàng số một -->
+  <section class="section container care-section" id="chon-size">
+    <div class="section-head">
+      <span class="eyebrow">02 · Chọn size cho bé</span>
+      <h2>Đo một lần, mặc vừa cả mùa</h2>
+    </div>
+    <div class="care-card" id="careSizing">
+      <p>Đang tải hướng dẫn chọn size…</p>
+    </div>
+  </section>
+
+  <!-- 03 · GIAO NHẬN -->
+  <section class="section container care-section" id="giao-nhan">
+    <div class="section-head">
+      <span class="eyebrow">03 · Giao nhận</span>
+      <h2>Phí ship &amp; cách nhận hàng</h2>
+    </div>
+    <div class="care-card" id="careShipping">
+      <p>Đang tải thông tin giao nhận…</p>
+    </div>
+  </section>
+
+  <!-- 04 · ĐỔI HÀNG -->
+  <section class="section container care-section" id="doi-size">
+    <div class="section-head">
+      <span class="eyebrow">04 · Đổi hàng</span>
+      <h2>Đổi size &amp; đổi hàng</h2>
+    </div>
+    <div class="care-card" id="careReturns">
+      <p>Đang tải thông tin đổi hàng…</p>
+    </div>
+  </section>
+
+  <!-- KẾT — một câu hỏi, một nút. Không thu thập thông tin gì của khách. -->
+  <section class="section container care-section" id="van-chua-ro">
+    <div class="care-end">
+      <h2>Vẫn chưa rõ? Nhắn shop</h2>
+      <p>Không cần soạn dài. Gửi mã mẫu, chiều cao và cân nặng của bé là Trukuky tư vấn được ngay.</p>
+      <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Nhắn Trukuky qua Messenger</a>
+      <div class="care-end-links">
+        <a href="tel:+842256506669">Gọi 0225 6506 669</a>
+        <a href="https://www.facebook.com/trukuky" target="_blank" rel="noopener">Fanpage Facebook</a>
+        <a href="index.html#new">Xem hàng mới về</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-col footer-brand">
+      <img class="footer-logo" src="brand/logo/trukuky-wordmark-ink.svg" alt="Trukuky" width="130" height="22" loading="lazy" decoding="async">
+      <p>Thời trang mẹ &amp; bé gái tại Hải Phòng. Thoải mái là chính mình.</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/trukuky" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg></a>
+        <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="social-btn" aria-label="Messenger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Mua sắm</h4>
+      <ul>
+        <li><a href="index.html#new">Mới về</a></li>
+        <li><a href="index.html#girls">Bé gái</a></li>
+        <li><a href="index.html#matching">Đồ đôi Mẹ &amp; Bé</a></li>
+        <li><a href="index.html#accessories">Phụ kiện</a></li>
+        <li><a href="index.html#collections">Bộ sưu tập</a></li>
+        <li><a href="cart.html" data-commerce-only hidden>Giỏ hàng</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trợ giúp</h4>
+      <ul>
+        <li><a href="cham-soc-khach-hang.html">Chăm sóc khách hàng</a></li>
+        <li><a href="cham-soc-khach-hang.html#chon-size">Bảng size theo chiều cao</a></li>
+        <li><button type="button" data-info="order">Cách đặt hàng</button></li>
+        <li><a href="cham-soc-khach-hang.html#giao-nhan">Phí vận chuyển</a></li>
+        <li><a href="cham-soc-khach-hang.html#doi-size">Đổi size &amp; đổi hàng</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Liên hệ</h4>
+      <ul>
+        <li><a href="tel:+842256506669">Hotline 0225 6506 669</a></li>
+        <li><a href="https://m.me/trukuky" target="_blank" rel="noopener">Nhắn tin Messenger</a></li>
+        <li><a href="https://www.facebook.com/trukuky" target="_blank" rel="noopener">Fanpage Facebook</a></li>
+        <li><a href="#lien-he">43 Lê Chân, Hải Phòng</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© <span id="year">2026</span> Trukuky · 43 Lê Chân, Hải Phòng</p>
+    <p>Xem mẫu trên website · Xác nhận giá, size và tình trạng hàng qua Fanpage</p>
+  </div>
+</footer>
+
+<div class="float-cta">
+  <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="fb-btn" aria-label="Nhắn Messenger"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.1 2 11.2c0 2.9 1.4 5.5 3.7 7.2V22l3.4-1.9c.9.3 1.9.4 2.9.4 5.5 0 10-4.1 10-9.3S17.5 2 12 2Zm1 12.4-2.5-2.7-4.9 2.7 5.4-5.7 2.6 2.7 4.8-2.7-5.4 5.7Z"/></svg></a>
+  <a href="cart.html" class="cart-fab-btn" aria-label="Giỏ hàng" data-commerce-only hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+    <span class="cart-badge" data-cart-badge>0</span>
+  </a>
+</div>
+
+<!-- Modal thông tin dùng chung — các nút data-info trong footer cần nó -->
+<div class="modal" id="infoModal">
+  <div class="modal-scrim"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
+    <button type="button" class="modal-close" aria-label="Đóng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h3 id="infoModalTitle"></h3>
+    <div class="modal-body" id="infoModalBody"></div>
+  </div>
+</div>
+
+<script src="js/data.js?v=16"></script>
+<script src="js/ui.js?v=6"></script>
+<script src="js/cart.js?v=5"></script>
+<script src="js/analytics.js?v=1"></script>
+<script>
+/* ==========================================================================
+   TRUKUKY — Trang Chăm sóc khách hàng
+   Nội dung chữ nằm trong data/policies.json để shop tự sửa được mà không
+   đụng vào code. Bảng size lấy từ SIZE_GUIDES trong js/data.js.
+
+   NGUYÊN TẮC: khi một khối có "confirmed": false, trang KHÔNG bịa ra con số
+   (phí ship, số ngày đổi trả). Nó kể đúng cách shop đang làm việc — shop báo
+   theo từng đơn — và nói điều đó một cách tự tin, vì đó là sự thật chứ không
+   phải một chỗ trống chờ điền.
+   ========================================================================== */
+
+/* Bản dự phòng: nếu policies.json lỗi cú pháp hoặc tải hỏng, trang vẫn đầy
+   đủ chữ thay vì hiện "Đang tải…" mãi. Giữ đồng bộ với data/policies.json. */
+const CARE_FALLBACK = {
+  contact: {
+    confirmed: true,
+    messenger: 'https://m.me/trukuky',
+    facebook: 'https://www.facebook.com/trukuky',
+    phone: 'tel:+842256506669',
+    phoneDisplay: '0225 6506 669',
+    address: '43 Lê Chân, Hải Phòng',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=43+L%C3%AA+Ch%C3%A2n%2C+H%E1%BA%A3i+Ph%C3%B2ng',
+    intro: 'Nhắn Messenger là cách nhanh nhất — Trukuky đọc tin ở đó cả ngày. Gọi điện hoặc ghé cửa hàng cũng được, tuỳ bạn tiện cách nào.',
+    hours: null,
+    hoursFallback: 'Trukuky chưa chốt một khung giờ cố định để đăng lên web. Nhắn Messenger trước khi ghé, shop báo ngay hôm đó mở tới mấy giờ.',
+  },
+  sizing: {
+    confirmed: false,
+    intro: 'Sai size là lý do phải đổi hàng nhiều nhất của đồ trẻ em. Ba bảng dưới đây giúp bạn khoanh vùng nhanh theo chiều cao và cân nặng của bé.',
+    luuYPhom: 'Đây là bảng tham khảo, không phải cam kết vừa vặn. Mỗi mẫu một phom khác nhau, nên Trukuky luôn xác nhận lại size cho đúng từng mẫu trước khi gửi hàng.',
+    quyTrinh: [
+      'Nhắn cho shop: chiều cao (cm) và cân nặng (kg) hiện tại của bé.',
+      'Kèm mã mẫu bạn đang xem — mã nằm ngay dưới ảnh trên trang sản phẩm.',
+      'Nếu là giày, đo thêm chiều dài bàn chân: cho bé đứng, đo từ gót đến đầu ngón chân dài nhất.',
+      'Shop đối chiếu đúng phom của mẫu đó rồi báo lại size nên lấy.',
+    ],
+  },
+  shipping: {
+    confirmed: false,
+    intro: 'Trukuky báo phí ship và cách giao theo từng đơn, vì tuỳ địa chỉ nhận và số món mà chi phí mỗi đơn một khác. Shop báo trước, bạn đồng ý rồi mới gửi hàng.',
+    quyTrinh: [
+      'Gửi đơn qua Messenger kèm địa chỉ nhận: số nhà, phường/xã, quận/huyện, tỉnh.',
+      'Shop báo lại phí ship, đơn vị vận chuyển và thời gian dự kiến cho đúng đơn đó.',
+      'Bạn xem mức phí thấy ổn thì xác nhận, shop mới đóng gói và gửi đi.',
+    ],
+    nhanTaiCuaHang: 'Nếu bạn ở gần 43 Lê Chân, có thể tới lấy trực tiếp — xem tận tay, cho bé thử rồi mới quyết định, và không mất phí ship. Nhắn shop trước một câu để shop giữ sẵn mẫu và size bạn cần.',
+    rows: [],
+  },
+  returns: {
+    confirmed: false,
+    intro: 'Trukuky chưa công bố một chính sách đổi trả cố định trên web. Điều kiện đổi được xác nhận ngay trong tin nhắn trước khi bạn chốt đơn — để hai bên cùng rõ ngay từ đầu.',
+    quyTrinh: [
+      'Trước khi chốt: nhắn mã mẫu và hỏi thẳng “mẫu này đổi size được không”. Shop trả lời ngay trong đoạn chat đó.',
+      'Giữ lại tem, mác và túi đựng cho tới khi bé mặc thử xong — món đồ còn nguyên thì shop có nhiều cách hỗ trợ hơn.',
+      'Bé mặc không vừa: nhắn lại đúng đoạn chat cũ kèm ảnh, shop hướng dẫn cách đổi cho trường hợp của bạn.',
+    ],
+    phongNgua: 'Cách chắc nhất để không phải đổi là hỏi size trước khi đặt. Gửi chiều cao, cân nặng và mã mẫu, shop đối chiếu phom thật của mẫu đó rồi mới báo size.',
+    rows: [],
+  },
+};
+
+function careEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function careParagraph(text) {
+  return text ? `<p>${careEsc(text)}</p>` : '';
+}
+
+function careStepsHTML(list) {
+  if (!Array.isArray(list) || !list.length) return '';
+  return `<ol class="steps care-steps">${list.map((s) => `<li>${careEsc(s)}</li>`).join('')}</ol>`;
+}
+
+/* Bảng số chỉ hiện khi shop đã bật confirmed: true VÀ có dòng thật. Thiếu một
+   trong hai thì trang im lặng về con số — im lặng còn hơn nói sai. */
+function careRowsHTML(block) {
+  const rows = Array.isArray(block.rows) ? block.rows.filter((r) => r && (r.muc || r.chiTiet)) : [];
+  if (!block.confirmed || !rows.length) return '';
+  return `
+    <div class="table-wrap">
+      <table class="size-table">
+        <thead><tr><th>Mục</th><th>Chi tiết</th></tr></thead>
+        <tbody>${rows.map((r) => `<tr><td>${careEsc(r.muc)}</td><td>${careEsc(r.chiTiet)}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+const CHIP_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A8 8 0 1 1 21 15Z"/></svg>';
+
+function careChip(label) {
+  return `<span class="care-chip">${CHIP_ICON}${careEsc(label)}</span>`;
+}
+
+function renderContact(c) {
+  const hoursText = c.hours ? c.hours : c.hoursFallback;
+  const hoursTitle = c.hours ? 'Giờ mở cửa' : 'Trước khi ghé';
+  return `
+    <div class="care-contact">
+      <div class="care-contact-main">
+        ${careParagraph(c.intro)}
+        <a href="${careEsc(c.messenger)}" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+          ${CHIP_ICON} Nhắn Trukuky qua Messenger
+        </a>
+        <a href="${careEsc(c.facebook)}" target="_blank" rel="noopener" class="btn btn-ghost-pink">Xem Fanpage Facebook</a>
+      </div>
+      <div class="care-contact-rows">
+        <div class="location-row">
+          <span class="location-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 2 .7 3a2 2 0 0 1-.4 2.1L8 10.1a16 16 0 0 0 6 6l1.3-1.4a2 2 0 0 1 2.1-.4c1 .3 2 .5 3 .7a2 2 0 0 1 1.6 2Z"/></svg></span>
+          <div><h4>Hotline</h4><p><a href="${careEsc(c.phone)}">${careEsc(c.phoneDisplay)}</a></p></div>
+        </div>
+        <div class="location-row">
+          <span class="location-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div><h4>Cửa hàng</h4><p>${careEsc(c.address)} · <a href="${careEsc(c.mapUrl)}" target="_blank" rel="noopener">Mở chỉ đường</a></p></div>
+        </div>
+        <div class="location-row">
+          <span class="location-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <div><h4>${careEsc(hoursTitle)}</h4><p>${careEsc(hoursText)}</p></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderSizing(s) {
+  const guides = (typeof SIZE_GUIDES !== 'undefined' && SIZE_GUIDES) ? SIZE_GUIDES : {};
+  const order = ['kids', 'matching', 'shoes'];
+  const tables = order
+    .filter((key) => guides[key])
+    .map((key) => `<div class="care-sizetable">${sizeTableHTML(guides[key])}</div>`)
+    .join('');
+  const label = s.confirmed ? 'Bảng size Trukuky' : 'Bảng tham khảo theo chiều cao &amp; cân nặng';
+  return `
+    ${careParagraph(s.intro)}
+    <div class="care-note">
+      <p><b>${label}.</b> ${careEsc(s.luuYPhom)}</p>
+    </div>
+    <h3>Gửi gì cho shop để được tư vấn size</h3>
+    ${careStepsHTML(s.quyTrinh)}
+    <h3>Bảng tra nhanh</h3>
+    <div class="care-sizetables">${tables}</div>
+    <div class="care-aside">
+      <h3>Bé đang giữa hai size?</h3>
+      <p>Bé mũm mĩm hoặc đang lớn nhanh thì thường nên lên một size. Nhưng đừng đoán một mình — gửi số đo cho shop, shop nhìn phom của đúng mẫu đó rồi nói nên lấy size nào.</p>
+    </div>`;
+}
+
+function renderShipping(sh) {
+  return `
+    ${careChip(sh.confirmed ? 'Phí ship đã công bố' : 'Shop báo phí theo từng đơn')}
+    ${careParagraph(sh.intro)}
+    ${careRowsHTML(sh)}
+    <h3>Các bước nhận hàng</h3>
+    ${careStepsHTML(sh.quyTrinh)}
+    <div class="care-aside">
+      <h3>Hoặc xem hàng tại cửa hàng</h3>
+      <p>${careEsc(sh.nhanTaiCuaHang)}</p>
+    </div>`;
+}
+
+function renderReturns(r) {
+  return `
+    ${careChip(r.confirmed ? 'Điều kiện đổi hàng đã công bố' : 'Shop xác nhận điều kiện ngay trong tin nhắn')}
+    ${careParagraph(r.intro)}
+    ${careRowsHTML(r)}
+    <h3>Cách làm khi cần đổi</h3>
+    ${careStepsHTML(r.quyTrinh)}
+    <div class="care-aside">
+      <h3>Đỡ nhất là không phải đổi</h3>
+      <p>${careEsc(r.phongNgua)} <a href="#chon-size">Xem hướng dẫn chọn size</a>.</p>
+    </div>`;
+}
+
+function renderCarePage(policies) {
+  const pick = (key) => Object.assign({}, CARE_FALLBACK[key], policies && policies[key] ? policies[key] : {});
+  document.getElementById('careContact').innerHTML = renderContact(pick('contact'));
+  document.getElementById('careSizing').innerHTML = renderSizing(pick('sizing'));
+  document.getElementById('careShipping').innerHTML = renderShipping(pick('shipping'));
+  document.getElementById('careReturns').innerHTML = renderReturns(pick('returns'));
+}
+
+function initCarePage() {
+  /* Ngăn kéo menu trên mobile — cùng cách làm với cart.html để hành vi
+     giống nhau ở mọi trang phụ. */
+  const toggle = document.querySelector('.menu-toggle');
+  const drawer = document.querySelector('.mobile-drawer');
+  if (toggle && drawer) {
+    const closeBtn = drawer.querySelector('.mobile-drawer-close');
+    const scrim = drawer.querySelector('.mobile-drawer-scrim');
+    const open = () => { drawer.classList.add('is-open'); document.documentElement.style.overflow = 'hidden'; };
+    const close = () => { drawer.classList.remove('is-open'); document.documentElement.style.overflow = ''; };
+    toggle.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    scrim.addEventListener('click', close);
+    drawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+  }
+
+  initCart();
+  initInfoModal();
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* Vẽ một lần sau khi fetch xong (thành công hay không) để trang không nháy
+     nội dung dự phòng rồi mới đổi sang nội dung thật. */
+  fetch(assetUrl('data/policies.json'))
+    .then((r) => (r.ok ? r.json() : null))
+    .catch(() => null)
+    .then((json) => renderCarePage(json))
+    .catch((err) => { console.error('Không đọc được data/policies.json', err); renderCarePage(null); });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCarePage);
+} else {
+  initCarePage();
+}
+</script>
+</body>
+</html>

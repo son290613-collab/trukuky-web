@@ -1,0 +1,12 @@
+{
+  "name": "trukuky-web",
+  "private": true,
+  "description": "Website công khai của Trukuky — thời trang mẹ & bé gái, 43 Lê Chân, Hải Phòng.",
+  "scripts": {
+    "photos": "node scripts/photo-sizes.js",
+    "images": "python3 scripts/build-images.py",
+    "build:products": "node scripts/build-product-pages.js",
+    "build:sitemap": "node scripts/build-sitemap.js",
+    "build": "npm run photos && npm run build:products && npm run build:sitemap"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "_huongDan": {
+    "fileNayLaGi": "Nội dung trang Chăm sóc khách hàng (cham-soc-khach-hang.html). Shop sửa thẳng ở đây, không cần đụng vào code. Trang web đọc lại file này mỗi lần khách mở.",
+    "quyTacQuanTrong": "Website KHÔNG BAO GIỜ được nói một con số mà shop chưa chốt: không phí ship, không thời gian giao, không số ngày đổi trả. Khi \"confirmed\" là false, trang chỉ mô tả cách shop làm việc — đúng sự thật, không hứa gì. Chỉ khi shop đã chốt con số thật thì mới điền vào \"rows\" và đổi \"confirmed\" thành true.",
+    "cachDien": [
+      "1. Mở file này bằng trình soạn thảo bất kỳ, hoặc sửa thẳng trên GitHub.",
+      "2. Tìm khối cần sửa: contact (liên hệ & giờ mở cửa), sizing (chọn size), shipping (phí ship & giao nhận), returns (đổi size & đổi hàng).",
+      "3. Sửa \"intro\" thành câu dẫn shop muốn khách đọc đầu tiên.",
+      "4. Sửa \"quyTrinh\" — đây là các bước shop đang làm thật. Mỗi bước là một dòng trong dấu ngoặc kép, cách nhau bằng dấu phẩy.",
+      "5. Khi đã có số chính thức, điền vào \"rows\" theo mẫu: {\"muc\": \"Nội thành Hải Phòng\", \"chiTiet\": \"25.000₫ · giao trong 1–2 ngày\"} — mỗi dòng cách nhau bằng dấu phẩy.",
+      "6. Chỉ sau khi chắc chắn đúng mới đổi \"confirmed\": false thành \"confirmed\": true. Lúc đó trang mới hiện bảng số ra cho khách.",
+      "7. Để nguyên \"confirmed\": false cũng không sao — trang vẫn đầy đủ và đẹp, chỉ hiện cách shop làm việc thay vì con số."
+    ],
+    "gioMoCua": "Trong khối contact, \"hours\" đang là null vì shop chưa cho giờ mở cửa. Điền vào, ví dụ: \"hours\": \"8:30 – 21:00 tất cả các ngày\" — trang sẽ tự thay câu tạm bằng đúng dòng đó.",
+    "veBangSize": "Ba bảng size trên trang lấy từ js/data.js và đang hiện dưới dạng BẢNG THAM KHẢO theo chiều cao & cân nặng. Khi shop đã rà lại và muốn công bố đây là bảng size chính thức của Trukuky, đổi sizing.confirmed thành true.",
+    "luuY": "Giữ nguyên dấu ngoặc kép và dấu phẩy như mẫu. Nếu lỡ gõ sai cú pháp JSON, trang vẫn chạy bình thường vì có bản nội dung dự phòng nằm sẵn trong trang — nhưng phần sửa sẽ không lên."
+  },
+
+  "contact": {
+    "confirmed": true,
+    "messenger": "https://m.me/trukuky",
+    "facebook": "https://www.facebook.com/trukuky",
+    "phone": "tel:+842256506669",
+    "phoneDisplay": "0225 6506 669",
+    "address": "43 Lê Chân, Hải Phòng",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=43+L%C3%AA+Ch%C3%A2n%2C+H%E1%BA%A3i+Ph%C3%B2ng",
+    "intro": "Nhắn Messenger là cách nhanh nhất — Trukuky đọc tin ở đó cả ngày. Gọi điện hoặc ghé cửa hàng cũng được, tuỳ bạn tiện cách nào.",
+    "hours": null,
+    "hoursFallback": "Trukuky chưa chốt một khung giờ cố định để đăng lên web, nên shop không muốn ghi đại một con số rồi bạn đến lại đóng cửa. Nhắn Messenger trước khi ghé, shop báo ngay hôm đó mở tới mấy giờ."
+  },
+
+  "sizing": {
+    "confirmed": false,
+    "intro": "Sai size là lý do phải đổi hàng nhiều nhất của đồ trẻ em. Ba bảng dưới đây giúp bạn khoanh vùng nhanh theo chiều cao và cân nặng của bé.",
+    "luuYPhom": "Đây là bảng tham khảo, không phải cam kết vừa vặn. Mỗi mẫu một phom khác nhau — cùng một bé, đầm xoè có thể lấy size khác với áo khoác. Vì vậy Trukuky luôn xác nhận lại size cho đúng từng mẫu trước khi gửi hàng.",
+    "quyTrinh": [
+      "Nhắn cho shop: chiều cao (cm) và cân nặng (kg) hiện tại của bé.",
+      "Kèm mã mẫu bạn đang xem — mã nằm ngay dưới ảnh trên trang sản phẩm.",
+      "Nếu là giày, đo thêm chiều dài bàn chân: cho bé đứng, đo từ gót đến đầu ngón chân dài nhất.",
+      "Shop đối chiếu đúng phom của mẫu đó rồi báo lại size nên lấy. Bé đang giữa hai size, shop sẽ nói nên lên hay xuống."
+    ]
+  },
+
+  "shipping": {
+    "confirmed": false,
+    "intro": "Trukuky báo phí ship và cách giao theo từng đơn, vì tuỳ địa chỉ nhận và số món mà chi phí mỗi đơn một khác. Shop báo trước, bạn đồng ý rồi mới gửi hàng.",
+    "quyTrinh": [
+      "Gửi đơn qua Messenger kèm địa chỉ nhận: số nhà, phường/xã, quận/huyện, tỉnh.",
+      "Shop báo lại phí ship, đơn vị vận chuyển và thời gian dự kiến cho đúng đơn đó.",
+      "Bạn xem mức phí thấy ổn thì xác nhận, shop mới đóng gói và gửi đi."
+    ],
+    "nhanTaiCuaHang": "Nếu bạn ở gần 43 Lê Chân, có thể tới lấy trực tiếp — xem tận tay, cho bé thử rồi mới quyết định, và không mất phí ship. Nhắn shop trước một câu để shop giữ sẵn mẫu và size bạn cần.",
+    "rows": []
+  },
+
+  "returns": {
+    "confirmed": false,
+    "intro": "Trukuky chưa công bố một chính sách đổi trả cố định trên web. Shop không muốn hứa một con số rồi làm khác, nên điều kiện đổi được xác nhận ngay trong tin nhắn trước khi bạn chốt đơn — để hai bên cùng rõ ngay từ đầu.",
+    "quyTrinh": [
+      "Trước khi chốt: nhắn mã mẫu và hỏi thẳng “mẫu này đổi size được không”. Shop trả lời ngay trong đoạn chat đó.",
+      "Giữ lại tem, mác và túi đựng cho tới khi bé mặc thử xong — món đồ còn nguyên thì shop có nhiều cách hỗ trợ hơn.",
+      "Bé mặc không vừa: nhắn lại đúng đoạn chat cũ kèm ảnh, shop hướng dẫn cách đổi cho trường hợp của bạn."
+    ],
+    "phongNgua": "Cách chắc nhất để không phải đổi là hỏi size trước khi đặt. Gửi chiều cao, cân nặng và mã mẫu, shop đối chiếu phom thật của mẫu đó rồi mới báo size.",
+    "rows": []
+  }
+}
