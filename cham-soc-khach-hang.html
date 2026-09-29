@@ -79,9 +79,14 @@
 
 /* Liên hệ: nút Messenger to nhất trang — đây là việc khách hay cần nhất. */
 .care-contact { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
-@media (max-width: 860px) { .care-contact { grid-template-columns: 1fr; } }
+/* minmax(0,1fr) chứ không phải 1fr trần: ô lưới mặc định có min-width:auto,
+   nên một track "1fr" vẫn bị nội dung dài nhất bên trong (nút Messenger,
+   số điện thoại) nong rộng ra quá khung cha. Ở màn 360px điều đó đẩy cả
+   trang cuộn ngang 6px. minmax(0,…) cho phép track co lại đúng khung. */
+@media (max-width: 860px) { .care-contact { grid-template-columns: minmax(0, 1fr); } }
 .care-contact-main { display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
 .care-contact-main .btn-lg { width: 100%; }
+.care-contact-main .btn-lg, .care-end .btn { max-width: 100%; white-space: normal; }
 @media (min-width: 520px) { .care-contact-main .btn-lg { width: auto; } }
 .care-contact-rows { display: flex; flex-direction: column; gap: var(--space-4); }
 .care-contact-rows a { color: var(--color-primary); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
