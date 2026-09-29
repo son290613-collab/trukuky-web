@@ -86,28 +86,6 @@
 .field-error { font-size: var(--text-xs); color: var(--color-primary); min-height: 1em; }
 .field.has-error input, .field.has-error textarea { border-color: var(--color-primary); }
 
-.pay-options { display: grid; gap: var(--space-3); margin-bottom: var(--space-5); }
-.pay-option {
-  display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4);
-  border: 1.5px solid var(--color-line); border-radius: var(--radius-md); cursor: pointer;
-  transition: border-color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
-}
-.pay-option:hover { border-color: var(--color-line-strong); }
-.pay-option.is-selected { border-color: var(--color-primary); background: var(--color-primary-tint); }
-.pay-option input { margin-top: 3px; accent-color: var(--color-primary); }
-.pay-option-title { font-weight: 600; }
-.pay-option-desc { font-size: var(--text-xs); color: var(--color-ink-soft); margin-top: 2px; }
-
-.checkout-confirm { text-align: center; padding-block: var(--space-6); display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
-.checkout-confirm .order-code { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--color-primary); }
-.qr-box { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-lg); padding: var(--space-4); box-shadow: var(--shadow-sm); }
-.qr-box img { width: 240px; height: 240px; display: block; border-radius: var(--radius-md); }
-.form-error-banner {
-  background: var(--color-primary-tint); color: var(--color-primary); border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-4); font-size: var(--text-sm); font-weight: 600; margin-bottom: var(--space-4); display: none;
-}
-.form-error-banner.is-visible { display: block; }
-
 /* ---------- Admin ---------- */
 .admin-login-card {
   max-width: 380px; margin-inline: auto; background: var(--color-surface); border: 1px solid var(--color-line);
@@ -133,7 +111,6 @@
 .float-cta .cart-fab-btn .cart-badge { top: -2px; right: -2px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .icon-btn, .cart-badge, .qty-stepper button, .pay-option { transition: none; }
 }
 
 /* ---------- Cart item: biến thể size/màu ---------- */
@@ -221,10 +198,44 @@
 .pd-reel figcaption { font-size: var(--text-xs); color: var(--color-ink-faint); }
 
 /* ---------- Mẫu từ livestream (thêm 26/09/2026) ---------- */
-.price-live small { font-size: .72em; font-weight: 500; opacity: .7; letter-spacing: .02em; }
+.price-value small { font-size: .72em; font-weight: 500; color: var(--color-ink-soft); letter-spacing: .02em; }
 .pd-live { margin: 18px 0 6px; padding: 14px 16px; border: 1px solid rgba(138, 47, 80, .18);
   border-radius: 14px; background: rgba(138, 47, 80, .04); display: grid; gap: 8px; }
 .pd-live-head { margin: 0; font-size: .95rem; }
 .pd-live ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; font-size: .92rem; }
-.pd-live-note { margin: 0; font-size: .84rem; opacity: .78; }
+.pd-live-note { margin: 0; font-size: .84rem; color: var(--color-ink-soft); }
 .pd-live-link { font-size: .9rem; font-weight: 600; justify-self: start; }
+
+
+/* ==========================================================================
+   Khối quyết định mua trên trang chi tiết
+   Bảng giá theo size đứng ngay trên ô chọn size: mỗi size một giá và món nào
+   đã hết đều nằm ở đây, nên khách đọc xong mới bấm chọn. Trước đây khối này
+   nằm lẫn trong phần giới thiệu live phía trên, cách ô chọn size một quãng
+   cuộn dài — khách bấm size mà chưa từng nhìn thấy nó.
+   ========================================================================== */
+.pd-sizeprice {
+  margin: 18px 0 6px; padding: 14px 16px;
+  border: 1px solid rgba(138, 47, 80, .18); border-radius: 14px;
+  background: rgba(138, 47, 80, .04); display: grid; gap: 8px;
+}
+.pd-sizeprice-head { margin: 0; font-size: .95rem; font-weight: 600; }
+.pd-sizeprice-head span { font-weight: 400; color: var(--color-ink-soft); }
+.pd-sizeprice ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; font-size: .92rem; }
+.pd-sizeprice-note { margin: 0; font-size: .84rem; color: var(--color-ink-soft); }
+
+/* Mẫu chưa có giá shop duyệt: nói thẳng lý do chưa đặt online được, thay vì
+   để khách tự đoán tại sao mẫu này khác các mẫu kia. */
+.pd-noprice-note {
+  margin: 10px 0 0; font-size: .84rem; color: var(--color-ink-soft);
+  flex-basis: 100%;
+}
+
+.pd-care-link { margin: var(--space-3) 0 0; font-size: var(--text-sm); }
+.pd-care-link a { font-weight: 600; }
+
+/* Trên điện thoại hai nút mua phải xếp dọc và đủ rộng để bấm bằng ngón cái. */
+@media (max-width: 560px) {
+  .pd-actions { flex-direction: column; align-items: stretch; }
+  .pd-actions .btn { width: 100%; justify-content: center; min-height: 48px; }
+}

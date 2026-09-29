@@ -11,13 +11,28 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const SITE_URL = (process.env.SITE_URL || 'https://trukuky.vn').replace(/\/$/, '');
+/* Mặc định PHẢI là địa chỉ site đang chạy thật. Trước đây mặc định là
+   https://trukuky.vn — tên miền chưa hoạt động — nên chỉ cần quên biến
+   SITE_URL một lần là toàn bộ canonical, og:url và sitemap trỏ sang một
+   domain chết, và Google lập chỉ mục nhầm. Có tên miền riêng thì đổi
+   dòng này, hoặc chạy kèm SITE_URL=... */
+const SITE_URL = (process.env.SITE_URL || 'https://son290613-collab.github.io/trukuky-web').replace(/\/$/, '');
 const products = require(path.join(ROOT, 'data/products.json'));
 
 const today = new Date().toISOString().slice(0, 10);
 
+/* Trang Chăm sóc khách hàng là trang nội dung thật (bảng size, phí ship, đổi
+   hàng) — đúng những thứ khách mẹ&bé tìm trên Google trước khi quyết định mua,
+   nên nó vào sitemap. Chỉ thêm khi file có thật, để sitemap không bao giờ trỏ
+   vào một URL 404. */
+const CARE_PAGE = 'cham-soc-khach-hang.html';
+const carePage = fs.existsSync(path.join(ROOT, CARE_PAGE))
+  ? [{ loc: `${SITE_URL}/${CARE_PAGE}`, priority: '0.7', changefreq: 'monthly' }]
+  : [];
+
 const urls = [
   { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly' },
+  ...carePage,
   ...products.map((p) => ({
     loc: `${SITE_URL}/p/${p.id}.html`,
     priority: '0.8',

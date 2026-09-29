@@ -24,8 +24,8 @@
 <link rel="stylesheet" href="../css/fonts.css?v=1">
 <link rel="stylesheet" href="../css/tokens.css?v=4">
 <link rel="stylesheet" href="../css/base.css?v=9">
-<link rel="stylesheet" href="../css/style.css?v=27">
-<link rel="stylesheet" href="../css/shop.css?v=7">
+<link rel="stylesheet" href="../css/style.css?v=28">
+<link rel="stylesheet" href="../css/shop.css?v=8">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Set Hoodie Ren Xám","image":["https://son290613-collab.github.io/trukuky-web/images/products/p07.jpg"],"description":"Hoodie xám mũ viền ren trắng, gấu áo đắp một lớp bèo ren; đi cùng quần dài xám cùng chất nỉ.","sku":"G8","brand":{"@type":"Brand","name":"Trukuky"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Trang chủ","item":"https://son290613-collab.github.io/trukuky-web/"},{"@type":"ListItem","position":2,"name":"Bé gái","item":"https://son290613-collab.github.io/trukuky-web/#girls"},{"@type":"ListItem","position":3,"name":"Set Hoodie Ren Xám"}]}</script>
 </head>
@@ -51,10 +51,11 @@
       <a href="../index.html#products">Mới về</a>
       <a href="../index.html#reels">Video</a>
       <a href="../index.html#collections">Bộ sưu tập</a>
+      <a href="../cham-soc-khach-hang.html">Chăm sóc khách hàng</a>
       <a href="../index.html#contact">Liên hệ</a>
     </nav>
     <div class="header-actions">
-      <a href="../cart.html" class="icon-btn" aria-label="Giỏ hàng" data-commerce-only hidden>
+      <a href="../cart.html" class="icon-btn" aria-label="Giỏ hàng" data-commerce-only>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
         <span class="cart-badge" data-cart-badge>0</span>
       </a>
@@ -79,14 +80,12 @@
         <h1>Set Hoodie Ren Xám</h1>
         <div class="pd-price"><span class="price-on-request">Liên hệ xác nhận giá</span></div>
         <p class="pd-desc">Hoodie xám mũ viền ren trắng, gấu áo đắp một lớp bèo ren; đi cùng quần dài xám cùng chất nỉ.</p>
+
+        <!-- Khối quyết định mua: giá → giá theo size → chọn size → thêm vào giỏ.
+             Bốn bước này phải đi liền nhau, không có video hay ảnh chen vào giữa.
+             Mọi thứ "tìm hiểu thêm" (clip, nguồn live, món chung khung ảnh) đã
+             được đẩy xuống dưới nút mua. -->
         
-        
-        
-        <div class="pd-siblings">
-          <h4>Cùng nằm trong khung ảnh này</h4>
-          <ul><li><a href="G7.html">Set Nơ Ren Đen</a><span><span class="price-on-request">Liên hệ xác nhận giá</span></span></li><li><a href="G9.html">Set Áo Belt Kem</a><span><span class="price-on-request">Liên hệ xác nhận giá</span></span></li></ul>
-          <p>Ảnh được giữ nguyên khung, không cắt — từng món có mã riêng để hỏi shop.</p>
-        </div>
 
         <div class="variant-picker" id="pdVariants" data-product="G8">
         <div class="variant-group">
@@ -113,16 +112,27 @@
           
           <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary btn-lg" id="pdConsultBtn" data-consult-product="G8">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A8 8 0 1 1 21 15Z"/></svg>
-            Nhắn hỏi mẫu G8
+            Hỏi giá mẫu G8
           </a>
-          
+          <p class="pd-noprice-note">Mẫu này chưa có bảng giá shop duyệt nên chưa đặt online được. Nhắn shop để biết giá và tình trạng hàng.</p>
         </div>
 
         <ul class="pd-trust">
-          <li><b>Giá và tình trạng hàng</b><span>Được shop xác nhận trực tiếp trước khi chốt</span></li>
-          <li><b>Tư vấn size</b><span>Gửi chiều cao, cân nặng và mã mẫu qua Messenger</span></li>
+          <li><b>Giá và tình trạng hàng</b><span>Shop xác nhận lại trước khi chốt đơn</span></li>
+          <li><b>Chọn đúng size</b><span>Gửi chiều cao, cân nặng và mã mẫu — shop tư vấn theo phom từng mẫu</span></li>
           <li><b>Xem tại cửa hàng</b><span>43 Lê Chân, Hải Phòng — nhắn Page trước khi ghé</span></li>
         </ul>
+        <p class="pd-care-link"><a href="../cham-soc-khach-hang.html">Bảng size, phí ship và đổi hàng — xem trang Chăm sóc khách hàng ↗</a></p>
+
+        <!-- Tìm hiểu thêm — đặt dưới nút mua có chủ đích. -->
+        
+        
+        
+        <div class="pd-siblings">
+          <h4>Cùng nằm trong khung ảnh này</h4>
+          <ul><li><a href="G7.html">Set Nơ Ren Đen</a><span><span class="price-on-request">Liên hệ xác nhận giá</span></span></li><li><a href="G9.html">Set Áo Belt Kem</a><span><span class="price-on-request">Liên hệ xác nhận giá</span></span></li></ul>
+          <p>Ảnh được giữ nguyên khung, không cắt — từng món có mã riêng.</p>
+        </div>
       </div>
     </div>
 
@@ -148,16 +158,17 @@
         <li><a href="../index.html#products">Mới về</a></li>
         <li><a href="../index.html#reels">Video</a></li>
         <li><a href="../index.html#collections">Bộ sưu tập</a></li>
-        
+        <li><a href="../cart.html" data-commerce-only>Giỏ hàng</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Trợ giúp</h4>
       <ul>
-        <li><button type="button" data-info="size">Bảng size theo chiều cao</button></li>
+        <li><a href="../cham-soc-khach-hang.html">Chăm sóc khách hàng</a></li>
+        <li><a href="../cham-soc-khach-hang.html#chon-size">Bảng size theo chiều cao</a></li>
         <li><button type="button" data-info="order">Cách đặt hàng</button></li>
-        <li><button type="button" data-info="ship">Phí vận chuyển</button></li>
-        <li><button type="button" data-info="return">Đổi size &amp; đổi hàng</button></li>
+        <li><a href="../cham-soc-khach-hang.html#giao-nhan">Phí vận chuyển</a></li>
+        <li><a href="../cham-soc-khach-hang.html#doi-size">Đổi size &amp; đổi hàng</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -185,10 +196,10 @@
   </div>
 </div>
 
-<script src="../js/data.js?v=14"></script>
-<script src="../js/ui.js?v=4"></script>
-<script src="../js/cart.js?v=2"></script>
+<script src="../js/data.js?v=16"></script>
+<script src="../js/ui.js?v=6"></script>
+<script src="../js/cart.js?v=5"></script>
 <script src="../js/analytics.js?v=1"></script>
-<script src="../js/product-page.js?v=2"></script>
+<script src="../js/product-page.js?v=3"></script>
 </body>
 </html>

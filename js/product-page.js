@@ -29,7 +29,19 @@ function syncAddButton() {
   }
   const needSize = (p.sizes || []).length > 0 && !pdVariant.size;
   const needColor = (p.colors || []).length > 0 && !pdVariant.color;
-  if (btn) btn.disabled = needSize || needColor;
+  if (btn) {
+    btn.disabled = needSize || needColor;
+    /* Nút xám mờ không nói cho khách biết phải làm gì tiếp. Đổi luôn chữ trên
+       nút thành việc cần làm — sai size là lý do đổi trả số một của quần áo
+       trẻ em, nên chặn ở đây là cố ý, nhưng phải chặn kèm lời hướng dẫn. */
+    const label = btn.querySelector('.add-to-cart-label');
+    if (label) {
+      label.textContent = needSize && needColor ? 'Chọn size và màu'
+        : needSize ? 'Chọn size để thêm vào giỏ'
+        : needColor ? 'Chọn màu để thêm vào giỏ'
+        : 'Thêm vào giỏ';
+    }
+  }
   if (hint) {
     hint.textContent = btn
       ? missingVariantHint(needSize, needColor)

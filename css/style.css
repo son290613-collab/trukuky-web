@@ -93,7 +93,11 @@
   min-height: var(--header-height);
   display: flex; align-items: center;
   color: #fff;
-  background: linear-gradient(to bottom, rgba(30, 16, 19, 0.5), rgba(30, 16, 19, 0));
+  /* Lúc trang vừa vẽ xong, header nằm trên nền hero rất sáng (hồng phấn), nên
+     lớp phủ này chính là thứ giữ cho chữ trắng đọc được. Ở mức 0.5 chữ trắng
+     chỉ đạt 3.96:1 — dưới ngưỡng 4.5 của WCAG cho cỡ chữ nav. Đậm thêm một
+     chút lên 0.58 để đạt 5.07:1; màu thương hiệu không đổi. */
+  background: linear-gradient(to bottom, rgba(30, 16, 19, 0.58), rgba(30, 16, 19, 0));
   transition: background var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
 }
 .site-header.is-scrolled {
@@ -103,6 +107,18 @@
   -webkit-backdrop-filter: blur(16px) saturate(1.3);
   box-shadow: 0 1px 0 var(--color-line);
 }
+
+/* ---------- Điểm neo của các liên kết #... ----------
+   Header là position: fixed, nên khi khách bấm "Mới về" / "Video" / "Bộ sưu
+   tập" / "Liên hệ", trình duyệt kéo đỉnh khu đó lên đúng đỉnh trang — tức là
+   nằm khuất SAU thanh header và tiêu đề khu bị che mất (đo được: hụt 12px ở
+   desktop, 20px trên điện thoại — đúng bằng chiều cao header trừ đi phần
+   padding-block của .section). Chừa sẵn khoảng lùi bằng đúng chiều cao header;
+   khoảng thở còn lại đã có padding-block của chính .section lo, nên không cần
+   cộng thêm như ở .collection (khối đó không có padding riêng). */
+#top, #products, #reels, #collections, #contact {
+  scroll-margin-top: var(--header-height);
+}
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); width: 100%; }
 .header-logo { display: inline-flex; }
 .logo-mark { display: block; height: 26px; width: auto; color: currentColor; }
@@ -110,7 +126,10 @@
 .main-nav { display: flex; align-items: center; gap: var(--space-5); }
 .main-nav a {
   font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  color: inherit; opacity: 0.82; position: relative; padding-block: 4px;
+  /* Bỏ opacity 0.82: chữ trắng mờ đi trên header lúc đầu chỉ còn 3.22:1.
+     Dùng nguyên màu chữ, phần phân biệt hover/đang-chọn đã có gạch chân
+     ::after lo — không cần làm mờ chữ ở trạng thái thường. */
+  color: inherit; position: relative; padding-block: 4px;
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 .main-nav a::after {
@@ -386,7 +405,9 @@
 }
 .chip:hover { border-color: var(--color-primary); color: var(--color-ink); }
 .chip.is-active { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
-.chip-count { font-size: 11px; opacity: 0.65; font-variant-numeric: tabular-nums; }
+/* opacity 0.65 kéo con số 11px xuống 3.06:1 trên nền chip trắng. Nâng lên 0.9
+   (5.43:1) — vẫn nhạt hơn nhãn chip một chút, nhưng đọc được. */
+.chip-count { font-size: 11px; opacity: 0.9; font-variant-numeric: tabular-nums; }
 
 .grid-count { font-size: var(--text-xs); color: var(--color-ink-faint); margin-bottom: var(--space-3); letter-spacing: 0.02em; }
 .grid-empty { width: 100%; padding: var(--space-6) 0; text-align: center; color: var(--color-ink-soft); }
@@ -481,10 +502,16 @@
 .quick-add:active { transform: translateY(1px) scale(1); box-shadow: inset 0 2px 5px rgba(190, 52, 85, 0.2); }
 
 .frame-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+/* Tên mẫu XUỐNG DÒNG chứ không bị cắt ngang chữ. Ở bề ngang 390px mỗi thẻ chỉ
+   rộng khoảng 170px, mà 28/42 tên dài hơn một dòng ("Set Gile Len Be + Sơ Mi
+   Jean + Chân Váy Nâu"), nên nowrap + ellipsis nuốt đúng phần khách cần đọc.
+   Cùng cách đã sửa cho danh sách món trong khung ở cuối file; giữ mức hai
+   dòng để các hàng trong lưới vẫn cao xấp xỉ nhau. */
 .product-card-title {
   padding-block: 5px;   /* nới vùng chạm cho ngón tay mà không đẩy lưới */
   font-family: var(--font-display); font-size: var(--text-sm); font-weight: 600; line-height: 1.35;
-  margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
+  margin-top: 4px; white-space: normal; overflow: hidden;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
 }
 .product-card-title:hover { color: var(--color-primary); }
 .product-card-price { font-size: var(--text-sm); color: var(--color-primary); font-weight: 700; font-variant-numeric: tabular-nums; display: inline-flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
@@ -865,7 +892,13 @@
 .lightbox-scrim { position: absolute; inset: 0; background: var(--color-overlay); backdrop-filter: blur(6px); }
 .lightbox-panel {
   position: relative; z-index: 2; background: var(--color-surface); border-radius: var(--radius-lg); overflow: hidden;
-  display: grid; grid-template-columns: 0.9fr 1.1fr; max-width: 900px; width: 100%; max-height: 90vh;
+  display: grid; grid-template-columns: 0.9fr 1.1fr; max-width: 900px; width: 100%;
+  /* Trên Safari iOS, 100vh là màn hình KHI ĐÃ ẩn thanh công cụ, nên 90vh vẫn
+     cao hơn phần thực sự nhìn thấy lúc thanh công cụ đang hiện — bảng tràn
+     khỏi màn hình trong khi trang đã bị khoá cuộn, khách không thoát ra được.
+     svh luôn là phần nhỏ nhất chắc chắn nhìn thấy (cách css/shop.css đang
+     dùng). Dòng vh giữ lại làm dự phòng cho trình duyệt cũ chưa biết svh. */
+  max-height: 90vh; max-height: 90svh;
   box-shadow: var(--shadow-lg); transform: scale(0.96) translateY(12px); transition: transform var(--duration-base) var(--ease-soft);
 }
 .lightbox.is-open .lightbox-panel { transform: scale(1) translateY(0); }
@@ -909,7 +942,10 @@
 .modal-scrim { position: absolute; inset: 0; background: var(--color-overlay); backdrop-filter: blur(6px); }
 .modal-panel {
   position: relative; z-index: 2; background: var(--color-surface); border-radius: var(--radius-lg);
-  padding: var(--space-5); max-width: 680px; width: 100%; max-height: 88vh; overflow-y: auto;
+  padding: var(--space-5); max-width: 680px; width: 100%; overflow-y: auto;
+  /* Cùng lý do với .lightbox-panel: vh trên Safari iOS lớn hơn vùng nhìn thấy
+     thật, modal bảng size tràn ra ngoài trong khi trang đang khoá cuộn. */
+  max-height: 88vh; max-height: 88svh;
   box-shadow: var(--shadow-lg);
 }
 .modal-panel h3 { font-size: var(--text-2xl); margin-bottom: var(--space-3); padding-right: 44px; }

@@ -62,7 +62,7 @@ function photoRatio(src) {
 }
 
 /* ---------- Ảnh AVIF nhiều bề rộng ----------
-   Bản AVIF được sinh sẵn lúc build bằng: npm run images (scripts/build-images.js).
+   Bản AVIF được sinh sẵn lúc build bằng: npm run images (scripts/build-images.py).
    Cùng bề rộng, AVIF nhẹ hơn JPEG khoảng bốn lần — cả bộ 35 ảnh giảm từ 7.136 KB
    xuống 1.553 KB. Trình duyệt chưa đọc được AVIF (Safari dưới 16.4) rơi về đúng
    file JPEG gốc trong thẻ <img>, không ai thấy ảnh vỡ.
@@ -153,18 +153,41 @@ function frameHotspots(frame) {
 }
 
 /* ---------- Giá ----------
-   priceStatus: "provisional" = con số dựng tạm khi làm web, shop chưa xác
-   nhận. Mọi chỗ hiển thị giá đều đi qua đây để không lỡ đưa một con số chưa
-   chốt tới khách như thể nó là giá chính thức. Khi shop gửi bảng giá thật,
-   đổi priceStatus thành "confirmed" trong data/products.json là xong. */
-/* Chỉ một sản phẩm có giá đã được shop xác nhận mới được đi vào
-   giỏ hàng. Quy tắc này được dùng ở cả giao diện và API; nhãn “tạm
-   tính” không phải là sự đồng ý cho phép đặt một đơn có giá sai. */
+   priceStatus có ba mức, và mức nào được vào giỏ hàng là một quyết định
+   kinh doanh, không phải một chi tiết kỹ thuật:
+
+   - "confirmed"   = shop đã gửi bảng giá chính thức. Vào giỏ được.
+   - "live"        = giá chính shop đã đọc công khai trong buổi livestream.
+                     Đây là giá shop tự nói ra trước hàng trăm người xem, nên
+                     nó vào giỏ được — nhưng luôn kèm câu "shop xác nhận lại",
+                     vì size còn hàng phải đối chiếu sổ chốt đơn.
+   - "provisional" = con số người làm web dựng tạm, shop CHƯA BAO GIỜ duyệt.
+                     Tuyệt đối không vào giỏ, và không hiện ra như giá thật.
+
+   Website không thu tiền: giỏ hàng chỉ soạn sẵn đơn rồi khách gửi qua
+   Messenger, shop chốt giá cuối. Nhờ vậy giá "live" đủ an toàn để đặt hàng
+   mà không có rủi ro thu sai tiền — thứ duy nhất phải giữ tuyệt đối là
+   không bao giờ đưa một con số shop chưa từng nói ra cho khách. */
+const ORDERABLE_PRICE_STATUS = ['confirmed', 'live'];
+
 function isOrderableProduct(p) {
   return !!p
-    && p.priceStatus === 'confirmed'
+    && ORDERABLE_PRICE_STATUS.includes(p.priceStatus)
     && Number.isFinite(Number(p.price))
     && Number(p.price) > 0;
+}
+
+/* priceFrom = con số hiển thị là giá SÀN ("từ 390.000₫"), không phải giá của
+   mọi size — bộ đồ đôi mẹ&bé và giày thường mỗi size một giá. 14/42 mẫu như
+   vậy. Mọi chỗ cộng tổng phải gọi hàm này để gắn nhãn "tạm tính" thay vì đưa
+   ra một con số nghe như đã chốt. */
+function isEstimatedPrice(p) {
+  return !!p && p.priceFrom === true;
+}
+
+/* Giỏ có bất kỳ dòng nào là giá sàn thì cả đơn chỉ là tạm tính. */
+function cartHasEstimatedPrice(lines) {
+  return (lines || []).some((l) => isEstimatedPrice(l.product));
 }
 
 function hasOrderableProducts() {
@@ -184,17 +207,17 @@ function consultClipboardText(p, variant) {
 
 function priceHTML(p, extraClass = '') {
   if (!p) return '';
+  /* Mẫu chưa có giá shop duyệt thì không hiện con số nào — thà để khách hỏi
+     còn hơn để khách nhớ một mức giá sai rồi thất vọng lúc chốt đơn. */
   if (!isOrderableProduct(p)) {
-    /* priceStatus "live": giá shop đã niêm yết công khai trong buổi livestream.
-       Được hiện ra, nhưng KHÔNG mở giỏ hàng — khách vẫn nhắn shop để giữ hàng,
-       vì size còn lại phải đối chiếu sổ chốt đơn trước khi nhận tiền. */
-    if (p.priceStatus === 'live' && Number(p.price) > 0) {
-      return `<span class="price-value price-live${extraClass ? ` ${extraClass}` : ''}">${p.priceFrom ? '<small>Từ</small> ' : ''}${formatVND(p.price)}</span>`;
-    }
     return '<span class="price-on-request">Liên hệ xác nhận giá</span>';
   }
-  const cls = `price-value${extraClass ? ` ${extraClass}` : ''}`;
-  return `<span class="${cls}">${formatVND(p.price)}</span>`;
+  /* Giá "live" giữ nguyên class price-live để CSS phân biệt được với giá đã
+     chốt, và giá sàn luôn phải đi kèm chữ "Từ" — bỏ chữ đó đi là biến giá
+     rẻ nhất của mẫu thành giá của mọi size. */
+  const live = p.priceStatus === 'live' ? ' price-live' : '';
+  const cls = `price-value${live}${extraClass ? ` ${extraClass}` : ''}`;
+  return `<span class="${cls}">${isEstimatedPrice(p) ? '<small>Từ</small> ' : ''}${formatVND(p.price)}</span>`;
 }
 
 /* ---------- Dữ liệu size nháp ----------
