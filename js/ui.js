@@ -58,15 +58,24 @@ function missingVariantHint(needSize, needColor) {
 const ADD_ICON_SVG =
   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
 
+const ARROW_ICON_SVG =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+  '<path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
 const CHAT_ICON_SVG =
   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
   '<path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A8 8 0 1 1 21 15Z"/></svg>';
 
-function compactProductAction(p, className, labelPrefix) {
+/* Nút tắt trên thẻ hàng. Trước đây nút này mở Messenger — khách phải rời
+   website, tự gõ lại mã mẫu và chờ shop rảnh tay mới trả lời, nên phần lớn
+   rơi rụng ngay tại đó. Giờ nút đưa thẳng vào giỏ (hoặc mở khung chọn size
+   nếu mẫu có nhiều size), đúng như mọi trang bán hàng khách đã quen dùng.
+   Mẫu chưa có giá thật không có nút này — nó chỉ dẫn sang trang chi tiết. */
+function compactProductAction(p, className) {
   if (isOrderableProduct(p)) {
     return `<button type="button" class="${className}" data-add-to-cart="${p.id}" aria-label="${needsVariantChoice(p) ? 'Chọn size cho' : 'Thêm vào giỏ'} ${escAttr(p.title)}">${ADD_ICON_SVG}</button>`;
   }
-  return `<a class="${className} is-consult" href="${STORE_MESSENGER}" target="_blank" rel="noopener" data-consult-product="${p.id}" aria-label="${labelPrefix || 'Nhắn tư vấn'} ${escAttr(p.title)}">${CHAT_ICON_SVG}</a>`;
+  return `<a class="${className} is-view" href="${productUrl(p.id)}" aria-label="Xem chi tiết ${escAttr(p.title)}">${ARROW_ICON_SVG}</a>`;
 }
 
 function hotspotHTML(p, i) {
@@ -104,7 +113,7 @@ function frameCardHTML(frame) {
         <span class="frame-item-index">${i + 1}</span>
         <a href="${productUrl(p.id)}">${p.title}</a>
         <span class="frame-item-price">${priceHTML(p)}</span>
-        ${compactProductAction(p, 'frame-item-add', 'Nhắn hỏi mẫu')}
+        ${compactProductAction(p, 'frame-item-add')}
       </li>`).join('')}
     </ul>`;
 
@@ -114,7 +123,7 @@ function frameCardHTML(frame) {
       ${pictureHTML(frame.src, isGroup ? `Khung ảnh bày ${frame.items.length} món Trukuky` : lead.title)}
       ${badge}${groupBadge}
       ${isGroup ? spots.map(hotspotHTML).join('') : ZOOM_HINT_SVG}
-      ${isGroup ? '' : compactProductAction(lead, 'quick-add', 'Nhắn hỏi mẫu')}
+      ${isGroup ? '' : compactProductAction(lead, 'quick-add')}
     </div>
     <div class="frame-body">${isGroup ? group : single}</div>
   </article>`;
@@ -158,49 +167,30 @@ const INFO_CONTENT = {
   },
   order: {
     title: 'Cách đặt hàng',
-    body: () => hasOrderableProducts() ? `
-      <ol class="steps"><li>Chọn mẫu, size và màu.</li><li>Kiểm tra giỏ hàng.</li><li>Gửi thông tin giao hàng.</li><li>Trukuky xác nhận đơn trước khi giao.</li></ol>` : `
+    body: () => `
       <ol class="steps">
-        <li><b>Mở mẫu bạn quan tâm</b> và xem các góc ảnh hiện có.</li>
-        <li><b>Chọn size, màu dự kiến</b> để cuộc tư vấn nhanh hơn.</li>
-        <li><b>Bấm “Nhắn hỏi mẫu”</b>; website sẽ sao chép mã mẫu để bạn dán vào Messenger.</li>
-        <li><b>Shop xác nhận</b> giá, size, tình trạng hàng và cách giao trước khi chốt đơn.</li>
+        <li><b>Chọn mẫu và size.</b> Bấm vào ảnh để xem nhanh, hoặc mở trang chi tiết để xem hết các góc chụp.</li>
+        <li><b>Thêm vào giỏ.</b> Mua nhiều mẫu thì thêm hết vào một giỏ, shop gói chung một đơn.</li>
+        <li><b>Điền tên, số điện thoại và địa chỉ.</b> Website sinh ra một mã đơn để hai bên cùng tra.</li>
+        <li><b>Trukuky gọi lại xác nhận</b> size còn hàng, phí giao và tổng tiền trước khi gửi. Bạn chỉ trả tiền khi nhận hàng.</li>
       </ol>
-      <p class="modal-note">Website tạm không thu thập họ tên, số điện thoại hay địa chỉ khi giá chưa được xác nhận.</p>`,
+      <p class="modal-note">Đặt trên web không phải là đã trừ hàng. Quần áo bán cùng lúc ở cửa hàng, trên live và trên web, nên size còn phải được shop đối chiếu sổ trước khi chốt — đó là lý do luôn có một cuộc gọi xác nhận.</p>`,
   },
   ship: {
-    title: 'Giao nhận &amp; phí vận chuyển',
+    title: 'Giao nhận &amp; thanh toán',
     body: () => `
-      <p>Phạm vi giao hàng, thời gian dự kiến, đơn vị vận chuyển, phí giao và phương thức thanh toán cần được Trukuky xác nhận theo từng đơn.</p>
-      <p class="modal-note">Website chưa công bố một chính sách giao nhận chính thức. Vui lòng <a href="${STORE_MESSENGER}" target="_blank" rel="noopener">nhắn Fanpage</a> với địa chỉ nhận dự kiến để shop báo phương án phù hợp trước khi chốt.</p>`,
+      <p><b>Thanh toán khi nhận hàng (COD).</b> Bạn xem hàng rồi mới trả tiền — website không thu tiền và không lưu thông tin thẻ.</p>
+      <p>Phạm vi giao, thời gian dự kiến, đơn vị vận chuyển và phí giao phụ thuộc địa chỉ nhận, nên Trukuky báo con số chính xác trong <b>cuộc gọi xác nhận trước khi gửi hàng</b>.</p>
+      <p class="modal-note">Website chưa công bố một biểu phí vận chuyển cố định. Bạn có thể huỷ đơn ngay tại cuộc gọi đó nếu thấy phí chưa hợp lý — đơn chỉ được gửi đi sau khi bạn đồng ý.</p>`,
   },
   return: {
     title: 'Đổi size &amp; đổi hàng',
     body: () => `
-      <p>Thời hạn, điều kiện, chi phí và các trường hợp không áp dụng đổi hàng đang chờ Trukuky phê duyệt thành chính sách chính thức.</p>
-      <p class="modal-note">Trước khi đặt, hãy <a href="${STORE_MESSENGER}" target="_blank" rel="noopener">nhắn Trukuky</a> để shop xác nhận chính sách áp dụng cho mẫu cụ thể. Website không tự đưa ra cam kết đổi trả khi chưa có phê duyệt.</p>`,
+      <p>Sai size là lý do đổi hàng số một của quần áo trẻ em, nên hãy nói chiều cao và cân nặng của bé để shop chọn giúp <b>trước khi</b> đơn được gửi đi.</p>
+      <p>Thời hạn đổi, điều kiện, chi phí chuyển hoàn và các trường hợp không áp dụng được Trukuky xác nhận cho từng đơn trong cuộc gọi trước khi gửi hàng.</p>
+      <p class="modal-note">Website không tự đưa ra một cam kết đổi trả mà shop chưa phê duyệt. Khi Trukuky chốt chính sách chính thức, nội dung này sẽ được thay bằng đúng cam kết đó.</p>`,
   },
 };
-
-/* Sao chép mã mẫu/biến thể là một tiện ích tại thiết bị, không gửi
-   dữ liệu đi đâu. Nếu trình duyệt chặn clipboard, liên kết Messenger vẫn
-   mở bình thường. */
-function initConsultLinks() {
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest('[data-consult-product]');
-    if (!link) return;
-    const p = PRODUCTS_BY_ID[link.dataset.consultProduct];
-    if (!p) return;
-    const variant = {
-      size: link.dataset.size || (typeof quickVariant !== 'undefined' ? quickVariant.size : ''),
-      color: link.dataset.color || (typeof quickVariant !== 'undefined' ? quickVariant.color : ''),
-    };
-    if (!navigator.clipboard || !window.isSecureContext) return;
-    navigator.clipboard.writeText(consultClipboardText(p, variant))
-      .then(() => showToast('Đã sao chép mã mẫu', 'Dán tin nhắn vào Messenger để Trukuky tư vấn nhanh hơn.'))
-      .catch(() => {});
-  });
-}
 
 function initInfoModal() {
   const modal = document.getElementById('infoModal');

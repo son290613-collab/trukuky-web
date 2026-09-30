@@ -1,0 +1,12 @@
+{
+  "_ghiChu": "Cấu hình công khai của website. KHÔNG đặt mật khẩu hay khoá bí mật ở đây — file này ai cũng đọc được.",
+
+  "_orderEndpoint": "Địa chỉ nhận đơn hàng. Để trống thì website KHÔNG gửi đơn đi đâu được: trang xác nhận sẽ nói thẳng với khách là đơn chưa tới shop và mời khách gọi. Cách tạo địa chỉ này (Google Apps Script, miễn phí, ~5 phút) nằm trong scripts/order-endpoint.gs và README.",
+  "orderEndpoint": "",
+
+  "phone": "0225 6506 669",
+  "phoneTel": "+842256506669",
+  "zalo": "",
+  "messenger": "https://m.me/trukuky",
+  "vietqrEnabled": false
+}

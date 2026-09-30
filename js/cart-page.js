@@ -4,25 +4,12 @@
    ========================================================================== */
 
 function cartEmptyHTML() {
-  if (!hasOrderableProducts()) {
-    return `
-    <div class="cart-empty catalog-notice">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A8 8 0 1 1 21 15Z"/></svg>
-      <span class="eyebrow">Catalogue tư vấn</span>
-      <h3>Trukuky đang xác nhận lại bảng giá</h3>
-      <p>Website tạm không nhận đơn online để tránh sai giá. Hãy gửi mã mẫu qua Messenger; shop sẽ xác nhận giá, size và tình trạng hàng trước khi chốt.</p>
-      <div class="cart-empty-actions">
-        <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Nhắn Trukuky tư vấn</a>
-        <a href="index.html#products" class="btn btn-outline btn-lg">Xem hàng mới</a>
-      </div>
-    </div>`;
-  }
   return `
   <div class="cart-empty">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
     <h3>Giỏ hàng của bạn đang trống</h3>
     <p>Khám phá bộ sưu tập mới nhất của Trukuky và thêm sản phẩm yêu thích vào giỏ.</p>
-    <a href="index.html#products" class="btn btn-primary btn-lg">Khám phá bộ sưu tập</a>
+    <a href="shop.html" class="btn btn-primary btn-lg">Xem tất cả sản phẩm</a>
   </div>`;
 }
 

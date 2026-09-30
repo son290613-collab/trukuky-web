@@ -16,9 +16,16 @@ const products = require(path.join(ROOT, 'data/products.json'));
 
 const today = new Date().toISOString().slice(0, 10);
 
+/* Trang chi tiết chỉ vào sitemap khi mẫu đó bán được — mẫu đang chờ chốt giá
+   mà được lập chỉ mục thì khách vào từ Google sẽ rơi thẳng vào một trang
+   không mua được, và đó là loại lượt truy cập tệ nhất. */
+const sellable = (p) => ['confirmed', 'live'].includes(p.priceStatus) && Number(p.price) > 0;
+
 const urls = [
   { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly' },
-  ...products.map((p) => ({
+  { loc: `${SITE_URL}/shop.html`, priority: '0.9', changefreq: 'weekly' },
+  { loc: `${SITE_URL}/sale.html`, priority: '0.9', changefreq: 'weekly' },
+  ...products.filter(sellable).map((p) => ({
     loc: `${SITE_URL}/p/${p.id}.html`,
     priority: '0.8',
     changefreq: 'weekly',

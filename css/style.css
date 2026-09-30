@@ -984,3 +984,141 @@
 /* Thẻ khung nhiều món không có nút phóng to ở góc, nên nhãn được dùng hết
    bề ngang thay vì chừa chỗ cho nút. */
 .frame-card.is-group .product-card-badge { max-width: calc(100% - 16px); }
+
+/* ==========================================================================
+   THƯƠNG MẠI — thanh cam kết, giá giảm, menu Sale, trang danh mục
+   Thêm ở bản chuyển từ "catalogue nhắn tin" sang "cửa hàng đặt được đơn".
+   ========================================================================== */
+
+:root {
+  --color-sale: #B3342A;
+  --color-sale-hover: #96291F;
+  --color-sale-tint: #FDECEA;
+}
+
+/* ---------- Thanh cam kết dưới hero ----------
+   Bốn câu, không phải mười. Mỗi câu phải là một điều shop luôn làm được —
+   một dòng cam kết sai một lần thì ba dòng còn lại cũng mất giá trị. */
+.trust-bar {
+  border-block: 1px solid var(--color-line);
+  background: var(--color-cream);
+}
+.trust-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+}
+.trust-item { display: flex; align-items: flex-start; gap: 0.7rem; min-width: 0; }
+.trust-item svg { width: 22px; height: 22px; flex: none; color: var(--color-primary); margin-top: 2px; }
+.trust-item b { display: block; font-size: var(--text-sm); font-weight: 600; line-height: 1.3; }
+.trust-item span { display: block; font-size: var(--text-xs); color: var(--color-ink-soft); line-height: 1.4; margin-top: 2px; }
+
+@media (max-width: 900px) {
+  .trust-row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  /* Điện thoại: cuộn ngang một hàng thay vì xếp thành bốn dòng đẩy sản
+     phẩm xuống dưới màn hình thứ hai. */
+  .trust-row {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .trust-row::-webkit-scrollbar { display: none; }
+  .trust-item { flex: 0 0 72%; scroll-snap-align: start; }
+}
+
+/* ---------- Giá và giảm giá ----------
+   Giá đang bán to và đậm nhất; giá gốc gạch ngang nhỏ hơn bên cạnh; phần
+   trăm là một con dấu đỏ tách riêng. Thứ tự này giữ nguyên ở mọi cỡ màn hình
+   để mắt khách luôn bắt đúng con số phải trả trước. */
+.price-group { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 0.45rem; }
+.price-value.is-sale { color: var(--color-sale); }
+.price-was {
+  font-size: 0.85em;
+  color: var(--color-ink-faint);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0;
+}
+.price-off {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.22em 0.45em;
+  border-radius: var(--radius-sm);
+  background: var(--color-sale);
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+.price-on-request { color: var(--color-ink-faint); font-size: var(--text-sm); font-style: italic; }
+
+/* ---------- Menu: mục Sale ---------- */
+.main-nav .nav-sale,
+.mobile-drawer-nav .nav-sale { color: var(--color-sale); font-weight: 600; }
+.main-nav .nav-sale:hover,
+.mobile-drawer-nav .nav-sale:hover { color: var(--color-sale-hover); }
+.main-nav a.is-current { color: var(--color-primary); font-weight: 600; }
+
+.btn-sale { background: var(--color-sale); border-color: var(--color-sale); color: #fff; }
+.btn-sale:hover { background: var(--color-sale-hover); border-color: var(--color-sale-hover); color: #fff; }
+
+.eyebrow-sale { color: var(--color-sale); }
+.chip.chip-sale { color: var(--color-sale); border-color: var(--color-line-strong); }
+.chip.chip-sale.is-active { background: var(--color-sale); border-color: var(--color-sale); color: #fff; }
+
+/* ---------- Đầu khu: tiêu đề bên trái, nút bên phải ---------- */
+/* Phải thắng được `.section-head--row > div { flex-direction: column }` ở
+   trên — khối nút này cũng là một <div> con nên dính luật đó. */
+.section-head--row > .section-head-actions {
+  display: flex; flex-direction: row; gap: var(--space-2);
+  flex-wrap: wrap; align-items: center; flex: none;
+}
+@media (max-width: 720px) {
+  /* Điện thoại: hai nút trợ giúp nằm cùng một hàng thay vì xếp chồng, nếu
+     không lưới sản phẩm bị đẩy xuống quá nửa màn hình thứ hai. */
+  .section-head--row > .section-head-actions { width: 100%; }
+  .section-head--row > .section-head-actions .btn { flex: 1 1 0; justify-content: center; min-width: 0; }
+}
+
+.grid-more { margin-top: var(--space-5); text-align: center; }
+
+/* ---------- Trang danh mục (shop.html, sale.html) ---------- */
+/* Đầu trang là position:fixed nên không chiếm chỗ trong dòng chảy — trang
+   nào không có hero phải tự chừa đúng chiều cao đó, nếu không dòng nhãn đầu
+   tiên sẽ chui xuống dưới logo. */
+.catalog-head { padding-top: calc(var(--header-height) + var(--space-5)); }
+.catalog-title { font-family: var(--font-display); font-size: var(--text-3xl); line-height: 1.08; margin: 0.2em 0 0.35em; }
+.sale-note {
+  margin: 0 0 var(--space-4);
+  padding: 0.7rem 0.95rem;
+  border-left: 3px solid var(--color-sale);
+  background: var(--color-sale-tint);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: var(--text-sm);
+  color: var(--color-ink-soft);
+}
+
+/* ---------- Mẫu chờ chốt giá ----------
+   Nhạt hơn lưới bán hàng và không có nút mua: nhìn là biết đây chưa phải
+   hàng đang bán, chứ không cần đọc mới biết. */
+.pending-section { border-top: 1px solid var(--color-line); padding-top: var(--space-6); }
+.pending-grid .frame-card { opacity: 0.72; }
+.pending-grid .frame-card:hover { opacity: 1; }
+.pending-grid .quick-add { display: none; }
+
+/* ---------- Nút "xem chi tiết" thay cho nút nhắn tin cũ ---------- */
+.quick-add.is-view,
+.frame-item-add.is-view { background: var(--color-surface); color: var(--color-primary); }
+
+.grid-empty .link-btn {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--color-primary);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

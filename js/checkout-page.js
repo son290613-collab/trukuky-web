@@ -100,6 +100,26 @@ function validateCheckoutForm(data) {
   return ok;
 }
 
+/* Mã đơn sinh ngay tại máy khách: TK + ngày + 4 ký tự ngẫu nhiên. Khách đọc
+   được mã này cho shop qua điện thoại kể cả khi đường truyền hỏng giữa chừng. */
+function makeOrderId() {
+  const d = new Date();
+  const ymd = `${String(d.getFullYear()).slice(2)}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+  const rnd = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `TK${ymd}-${rnd}`;
+}
+
+/* Bản tóm tắt đơn ở dạng chữ, để khách copy gửi shop khi đường gửi đơn hỏng. */
+function orderSummaryText(order) {
+  const lines = order.items.map((i) => {
+    const v = [i.size, i.color].filter(Boolean).join(' / ');
+    return `• ${i.id}${v ? ` (${v})` : ''} × ${i.qty}`;
+  }).join('\n');
+  return `Đơn ${order.id}\n${lines}\nTổng: ${formatVND(order.total)}\n`
+    + `${order.customer.name} — ${order.customer.phone}\n${order.customer.address}`
+    + `${order.customer.note ? `\nGhi chú: ${order.customer.note}` : ''}`;
+}
+
 async function handleCheckoutSubmit(e) {
   e.preventDefault();
   const form = e.target;
@@ -117,50 +137,88 @@ async function handleCheckoutSubmit(e) {
     return;
   }
 
-  const paymentMethod = form.querySelector('input[name="paymentMethod"]:checked').value;
-  const items = getCartLines().map((l) => ({ id: l.product.id, qty: l.qty, size: l.size, color: l.color }));
+  const order = {
+    id: makeOrderId(),
+    customer: data,
+    items: getCartLines().map((l) => ({ id: l.product.id, qty: l.qty, size: l.size, color: l.color })),
+    total: getCartTotal(),
+    paymentMethod: form.querySelector('input[name="paymentMethod"]:checked').value,
+    company: form.company.value,
+  };
 
   const submitBtn = document.getElementById('submitOrderBtn');
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Đang xử lý...';
+  submitBtn.textContent = 'Đang gửi đơn…';
+
+  const endpoint = (SITE_CONFIG.orderEndpoint || '').trim();
+
+  /* Chưa cấu hình nơi nhận đơn thì KHÔNG được báo "đặt hàng thành công".
+     Một trang xác nhận màu xanh trong khi shop không hề nhận được gì là cách
+     nhanh nhất để mất một khách vĩnh viễn — thà nói thẳng là đơn chưa tới. */
+  if (!endpoint) {
+    clearCart();
+    renderCheckoutConfirmation(order, 'not-sent');
+    return;
+  }
 
   try {
-    const res = await fetch('/api/orders', {
+    /* Apps Script không trả CORS header cho preflight, nên gửi dạng text/plain
+       (đây là "simple request", trình duyệt không preflight). Máy chủ vẫn đọc
+       ra đúng JSON ở e.postData.contents. */
+    const res = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ customer: data, items, paymentMethod, company: form.company.value }),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(order),
     });
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.error || 'Có lỗi xảy ra, vui lòng thử lại.');
-
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     clearCart();
-    renderCheckoutConfirmation(result);
+    renderCheckoutConfirmation(order, 'sent');
   } catch (err) {
-    banner.textContent = err.message;
-    banner.classList.add('is-visible');
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Đặt hàng';
+    /* Gửi hỏng: giữ nguyên giỏ để khách thử lại, và đưa mã đơn + bản tóm tắt
+       để khách gọi chốt bằng điện thoại nếu không muốn thử lại. */
+    console.error('Không gửi được đơn', err);
+    renderCheckoutConfirmation(order, 'failed');
   }
 }
 
-function renderCheckoutConfirmation(order) {
+function renderCheckoutConfirmation(order, status) {
   const root = document.getElementById('checkoutRoot');
-  const qrBlock = order.paymentMethod === 'qr' && order.vietqrImage ? `
-    <div class="qr-box">
-      <img src="${order.vietqrImage}" alt="Mã QR chuyển khoản đơn hàng ${order.id}">
-    </div>
-    <p>Quét mã để chuyển khoản đúng số tiền — nội dung chuyển khoản đã tự động điền mã đơn hàng.</p>
-  ` : `<p>Trukuky sẽ liên hệ xác nhận đơn và giao hàng — thanh toán khi nhận hàng (COD).</p>`;
+  const tel = SITE_CONFIG.phoneTel || '';
+  const phone = SITE_CONFIG.phone || '';
+  const callBtn = tel
+    ? `<a href="tel:${tel}" class="btn btn-primary btn-lg">Gọi Trukuky ${phone}</a>`
+    : '';
+
+  const sent = status === 'sent';
+  const head = sent
+    ? `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+       <h2>Đã nhận đơn của bạn</h2>`
+    : `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--color-sale)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
+       <h2>Đơn chưa gửi được tới shop</h2>`;
+
+  const body = sent
+    ? `<p>Trukuky sẽ gọi vào số <b>${escAttr(order.customer.phone)}</b> để xác nhận size còn hàng, phí giao và tổng tiền trước khi gửi. Bạn thanh toán khi nhận hàng.</p>`
+    : `<p class="checkout-warn">Đơn của bạn <b>chưa tới shop</b>. Vui lòng gọi cho Trukuky và đọc mã đơn dưới đây — shop sẽ ghi đơn giúp bạn ngay.</p>
+       <div class="order-copy"><pre>${escAttr(orderSummaryText(order))}</pre>
+       <button type="button" class="btn btn-outline btn-sm" id="copyOrderBtn">Sao chép nội dung đơn</button></div>`;
 
   root.innerHTML = `
-  <div class="checkout-confirm">
-    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-    <h2>Đặt hàng thành công!</h2>
+  <div class="checkout-confirm${sent ? '' : ' is-failed'}">
+    ${head}
     <span class="order-code">${order.id}</span>
-    <p>Tổng thanh toán: <b>${formatVND(order.total)}</b></p>
-    ${qrBlock}
-    <a href="index.html" class="btn btn-outline">Về trang chủ</a>
+    <p>Tổng tiền hàng: <b>${formatVND(order.total)}</b> <i>(chưa gồm phí giao)</i></p>
+    ${body}
+    <div class="confirm-actions">
+      ${callBtn}
+      <a href="index.html" class="btn btn-outline">Về trang chủ</a>
+    </div>
   </div>`;
+
+  document.getElementById('copyOrderBtn')?.addEventListener('click', () => {
+    navigator.clipboard?.writeText(orderSummaryText(order))
+      .then(() => showToast('Đã sao chép đơn hàng', 'Gửi cho Trukuky để shop ghi đơn giúp bạn.'))
+      .catch(() => {});
+  });
 }
 
 function bindPayOptionClicks() {
@@ -172,29 +230,20 @@ function bindPayOptionClicks() {
   });
 }
 
+let SITE_CONFIG = {};
+
+const siteConfigReady = fetch(assetUrl('data/site-config.json'))
+  .then((r) => r.json())
+  .then((cfg) => { SITE_CONFIG = cfg || {}; })
+  .catch(() => { SITE_CONFIG = {}; });
+
 function initCheckoutPage() {
   const lines = getCartLines();
   if (!lines.length) {
     window.location.href = 'cart.html';
     return;
   }
-  const total = getCartTotal();
-
-  // Render immediately with COD only — don't make the whole form wait on a
-  // network round-trip for a payment option most orders won't even need.
-  // Upgrade in place to VietQR if/when the config confirms it's enabled.
-  renderCheckoutForm(lines, total, false);
-
-  fetch('/api/config')
-    .then((r) => r.json())
-    .then((cfg) => {
-      if (!cfg.vietqrEnabled) return;
-      const payOptions = document.querySelector('.pay-options');
-      if (!payOptions) return;
-      payOptions.outerHTML = payOptionHTML(true);
-      bindPayOptionClicks();
-    })
-    .catch(() => {});
+  renderCheckoutForm(lines, getCartTotal(), !!SITE_CONFIG.vietqrEnabled);
 }
 
 /* Footer của trang này cũng có các nút mở bảng size / phí ship / đổi trả, nên
@@ -206,4 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
 
-productsReady.then(initCheckoutPage);
+/* Cần CẢ hai: danh mục (để dựng lại giỏ) và cấu hình (để biết gửi đơn đi
+   đâu). Chạy sớm một trong hai sẽ dựng form với nơi nhận đơn rỗng. */
+Promise.all([productsReady, siteConfigReady]).then(initCheckoutPage);

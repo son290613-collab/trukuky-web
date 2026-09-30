@@ -37,8 +37,7 @@
       window.trackTrukuky('click_facebook', { placement: target.closest('footer') ? 'footer' : 'page' });
     } else if (/m\.me\/trukuky/i.test(href)) {
       window.trackTrukuky('click_messenger', {
-        placement: target.closest('.lightbox') ? 'quick_view' : target.closest('footer') ? 'footer' : 'page',
-        product_id: target.dataset.consultProduct,
+        placement: target.closest('footer') ? 'footer' : 'page',
       });
     }
 

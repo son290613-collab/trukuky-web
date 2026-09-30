@@ -30,6 +30,7 @@ function formatVND(n) {
    mọi lối vào (chip, menu, ô danh mục, link chia sẻ) đều quy về một key ở đây. */
 const PRODUCT_FILTERS = [
   { key: 'all', label: 'Tất cả' },
+  { key: 'sale', label: 'Giảm giá' },
   { key: 'live', label: 'Mẫu live còn size' },
   { key: 'new', label: 'Mới về' },
   { key: 'matching', label: 'Đồ đôi Mẹ & Bé' },
@@ -41,7 +42,7 @@ const PRODUCT_FILTERS = [
 
 /* "girls" vẫn là key hợp lệ cho link menu và link chia sẻ, chỉ không cần một
    chip riêng vì ba chip độ tuổi ở trên đã phủ hết. */
-const EXTRA_FILTER_LABELS = { girls: 'Bé gái', accessories: 'Phụ kiện', all: 'Tất cả' };
+const EXTRA_FILTER_LABELS = { girls: 'Bé gái', accessories: 'Phụ kiện', all: 'Tất cả', sale: 'Giảm giá' };
 
 /* ---------- Kích thước thật của từng khung ảnh ----------
    Không có tấm nào bị cắt: mỗi ô ảnh trên trang lấy đúng tỉ lệ gốc ở đây
@@ -101,6 +102,7 @@ function pictureHTML(src, alt, opts = {}) {
 /* Ngoài chip, các ô danh mục còn lọc theo độ tuổi: key dạng "age:4-6T". */
 function matchesFilter(product, key) {
   if (!key || key === 'all') return true;
+  if (key === 'sale') return isOnSale(product);
   if (key.startsWith('age:')) return (product.ages || []).includes(key.slice(4));
   return (product.sections || []).includes(key);
 }
@@ -111,6 +113,50 @@ function filterProducts(key) {
 
 function countProducts(key) {
   return filterProducts(key).length;
+}
+
+/* ---------- Đợt hàng (drop) ----------
+   Shop nhập và lên hàng theo từng buổi live, nên "mới" không phải một cái
+   nhãn dán tay mà là buổi live gần nhất mẫu đó còn xuất hiện. Trang chủ chỉ
+   giữ đợt mới nhất; mọi đợt trước dồn sang trang Tất cả sản phẩm — nhờ vậy
+   trang chủ không dài thêm mãi sau mỗi buổi live, và khách quay lại luôn
+   thấy ngay thứ chưa từng thấy. */
+const CATALOGUE_DROP = 'catalogue';
+
+function dropOf(p) {
+  return (p && p.drop) || CATALOGUE_DROP;
+}
+
+function latestDrop() {
+  return PRODUCTS.map(dropOf).filter((d) => d !== CATALOGUE_DROP).sort().pop() || CATALOGUE_DROP;
+}
+
+function dropLabel(drop) {
+  const [y, m, d] = String(drop || '').split('-');
+  return d ? `Live ${Number(d)}/${Number(m)}` : 'Bộ sưu tập';
+}
+
+function isNewDrop(p) {
+  return dropOf(p) === latestDrop() || (p.sections || []).includes('new');
+}
+
+/* Bốn lối vào của website, tất cả đều lọc sẵn mẫu chưa có giá thật ra ngoài:
+   khách không bao giờ bấm vào một thẻ hàng rồi phát hiện không mua được. */
+function homeProducts() {
+  return PRODUCTS.filter((p) => isOrderableProduct(p) && isNewDrop(p));
+}
+
+function shopProducts() {
+  return PRODUCTS.filter(isOrderableProduct);
+}
+
+function saleProducts() {
+  return PRODUCTS.filter(isOnSale);
+}
+
+/* Mẫu đã có ảnh nhưng shop chưa gửi giá. Không nằm trong lưới bán hàng. */
+function pendingProducts() {
+  return PRODUCTS.filter((p) => !hasRealPrice(p));
 }
 
 /* ---------- Khung ảnh ----------
@@ -153,48 +199,62 @@ function frameHotspots(frame) {
 }
 
 /* ---------- Giá ----------
-   priceStatus: "provisional" = con số dựng tạm khi làm web, shop chưa xác
-   nhận. Mọi chỗ hiển thị giá đều đi qua đây để không lỡ đưa một con số chưa
-   chốt tới khách như thể nó là giá chính thức. Khi shop gửi bảng giá thật,
-   đổi priceStatus thành "confirmed" trong data/products.json là xong. */
-/* Chỉ một sản phẩm có giá đã được shop xác nhận mới được đi vào
-   giỏ hàng. Quy tắc này được dùng ở cả giao diện và API; nhãn “tạm
-   tính” không phải là sự đồng ý cho phép đặt một đơn có giá sai. */
-function isOrderableProduct(p) {
+   priceStatus:
+     "confirmed"   = shop đã gửi bảng giá chính thức.
+     "live"        = giá shop tự đọc công khai trong buổi livestream. Khách đã
+                     nghe chính shop nói con số này, nên bán được.
+     "provisional" = con số dựng tạm lúc làm web, shop CHƯA xác nhận. Không
+                     bao giờ hiện ra ngoài và không bao giờ bán được — một
+                     cái nhãn "tạm tính" không phải là sự cho phép bán sai giá.
+   Chỉ hai trạng thái đầu mới mở luồng đặt hàng. */
+const SELLABLE_PRICE_STATUS = ['confirmed', 'live'];
+
+function hasRealPrice(p) {
   return !!p
-    && p.priceStatus === 'confirmed'
+    && SELLABLE_PRICE_STATUS.includes(p.priceStatus)
     && Number.isFinite(Number(p.price))
     && Number(p.price) > 0;
+}
+
+function isOrderableProduct(p) {
+  return hasRealPrice(p);
 }
 
 function hasOrderableProducts() {
   return PRODUCTS.some(isOrderableProduct);
 }
 
-function consultLabel(p) {
-  return p ? `Nhắn hỏi mẫu ${p.id}` : 'Nhắn Trukuky tư vấn';
+/* ---------- Giảm giá ----------
+   "-X%" chỉ hiện khi shop đã gửi giá gốc thật (priceOriginal). Thiếu giá gốc
+   thì mẫu vẫn nằm trong mục Sale nhưng KHÔNG bịa ra một con số để trừ ngược:
+   niêm yết sai giá trước khi giảm là vi phạm quy định khuyến mại, và khách
+   bắt được một lần là mất niềm tin vĩnh viễn. */
+function saleOriginal(p) {
+  const was = Number(p && p.priceOriginal);
+  return Number.isFinite(was) && was > Number(p && p.price) ? was : 0;
 }
 
-function consultClipboardText(p, variant) {
-  if (!p) return 'Mình muốn nhờ Trukuky tư vấn.';
-  const v = variant || {};
-  const details = [v.size, v.color].filter(Boolean).join(' · ');
-  return `Mình muốn hỏi mẫu ${p.id} — ${p.title}${details ? ` (${details})` : ''}. Nhờ Trukuky xác nhận giá và size phù hợp.`;
+function discountPct(p) {
+  const was = saleOriginal(p);
+  return was ? Math.round((1 - Number(p.price) / was) * 100) : 0;
+}
+
+function isOnSale(p) {
+  return !!p && hasRealPrice(p) && (p.sale === true || saleOriginal(p) > 0);
 }
 
 function priceHTML(p, extraClass = '') {
   if (!p) return '';
-  if (!isOrderableProduct(p)) {
-    /* priceStatus "live": giá shop đã niêm yết công khai trong buổi livestream.
-       Được hiện ra, nhưng KHÔNG mở giỏ hàng — khách vẫn nhắn shop để giữ hàng,
-       vì size còn lại phải đối chiếu sổ chốt đơn trước khi nhận tiền. */
-    if (p.priceStatus === 'live' && Number(p.price) > 0) {
-      return `<span class="price-value price-live${extraClass ? ` ${extraClass}` : ''}">${p.priceFrom ? '<small>Từ</small> ' : ''}${formatVND(p.price)}</span>`;
-    }
-    return '<span class="price-on-request">Liên hệ xác nhận giá</span>';
-  }
+  if (!hasRealPrice(p)) return '<span class="price-on-request">Đang cập nhật giá</span>';
   const cls = `price-value${extraClass ? ` ${extraClass}` : ''}`;
-  return `<span class="${cls}">${formatVND(p.price)}</span>`;
+  const from = p.priceFrom ? '<small>Từ</small> ' : '';
+  const was = saleOriginal(p);
+  if (!was) return `<span class="${cls}">${from}${formatVND(p.price)}</span>`;
+  return `<span class="price-group">`
+    + `<span class="${cls} is-sale">${from}${formatVND(p.price)}</span>`
+    + `<s class="price-was">${formatVND(was)}</s>`
+    + `<span class="price-off">-${discountPct(p)}%</span>`
+    + `</span>`;
 }
 
 /* ---------- Dữ liệu size nháp ----------

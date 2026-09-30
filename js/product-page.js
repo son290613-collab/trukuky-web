@@ -15,26 +15,15 @@ function pdProduct() {
 
 function syncAddButton() {
   const btn = document.getElementById('pdAddBtn');
-  const consult = document.getElementById('pdConsultBtn');
   const hint = document.getElementById('variantHint');
   const p = pdProduct();
-  if (!p || (!btn && !consult)) return;
-  if (btn) {
-    btn.dataset.size = pdVariant.size;
-    btn.dataset.color = pdVariant.color;
-  }
-  if (consult) {
-    consult.dataset.size = pdVariant.size;
-    consult.dataset.color = pdVariant.color;
-  }
+  if (!p || !btn) return;
+  btn.dataset.size = pdVariant.size;
+  btn.dataset.color = pdVariant.color;
   const needSize = (p.sizes || []).length > 0 && !pdVariant.size;
   const needColor = (p.colors || []).length > 0 && !pdVariant.color;
-  if (btn) btn.disabled = needSize || needColor;
-  if (hint) {
-    hint.textContent = btn
-      ? missingVariantHint(needSize, needColor)
-      : 'Chọn size và màu dự kiến; Trukuky sẽ xác nhận lại khi tư vấn.';
-  }
+  btn.disabled = needSize || needColor;
+  if (hint) hint.textContent = missingVariantHint(needSize, needColor);
 }
 
 function initVariants() {
@@ -81,8 +70,9 @@ function renderRelated() {
   const p = pdProduct();
   if (!grid || !p) return;
   const key = (p.sections || []).find((s) => s !== 'new') || 'new';
-  const related = PRODUCTS.filter((x) => x.id !== p.id && matchesFilter(x, key)).slice(0, 5);
-  const fill = related.length >= 5 ? related : [...related, ...PRODUCTS.filter((x) => x.id !== p.id && !related.includes(x))].slice(0, 5);
+  const pool = shopProducts();
+  const related = pool.filter((x) => x.id !== p.id && matchesFilter(x, key)).slice(0, 5);
+  const fill = related.length >= 5 ? related : [...related, ...pool.filter((x) => x.id !== p.id && !related.includes(x))].slice(0, 5);
   grid.innerHTML = fill.map(productCardHTML).join('');
 }
 
@@ -93,7 +83,6 @@ window.openVariantPicker = function openVariantPicker(product) {
 
 document.addEventListener('DOMContentLoaded', () => {
   initInfoModal();
-  initConsultLinks();
   initGallery();
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();

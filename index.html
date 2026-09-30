@@ -26,11 +26,11 @@
       imagesizes="(max-width: 900px) 92vw, 42vw" href="images/products/avif/p01-800.avif">
 <link rel="stylesheet" href="css/tokens.css?v=4">
 <link rel="stylesheet" href="css/base.css?v=9">
-<link rel="stylesheet" href="css/style.css?v=27">
+<link rel="stylesheet" href="css/style.css?v=31">
 <link rel="stylesheet" href="css/shop.css?v=7">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"Trukuky","description":"Thời trang mẹ và bé gái tại Hải Phòng.","url":"https://son290613-collab.github.io/trukuky-web/","image":"https://son290613-collab.github.io/trukuky-web/images/products/p01.jpg","telephone":"+842256506669","address":{"@type":"PostalAddress","streetAddress":"43 Lê Chân","addressLocality":"Hải Phòng","addressCountry":"VN"},"sameAs":["https://www.facebook.com/trukuky"]}</script>
 </head>
-<body>
+<body data-scope="home">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <filter id="brushTexture2" x="-30%" y="-30%" width="160%" height="160%">
@@ -58,9 +58,10 @@
       </svg>
     </a>
     <nav class="main-nav" aria-label="Chính">
-      <a href="#products">Mới về</a>
+      <a href="#products" class="is-current">Mới về</a>
+      <a href="shop.html">Tất cả sản phẩm</a>
+      <a href="sale.html" class="nav-sale">Giảm giá</a>
       <a href="#reels">Video</a>
-      <a href="#collections">Bộ sưu tập</a>
       <a href="#contact">Liên hệ</a>
     </nav>
     <div class="header-actions">
@@ -68,7 +69,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input type="search" name="q" placeholder="Tìm sản phẩm…" aria-label="Tìm sản phẩm" data-search-input autocomplete="off">
       </form>
-      <a href="cart.html" class="icon-btn" aria-label="Giỏ hàng" data-commerce-only hidden>
+      <a href="cart.html" class="icon-btn" aria-label="Giỏ hàng" data-commerce-only>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
         <span class="cart-badge" data-cart-badge>0</span>
       </a>
@@ -91,15 +92,17 @@
     </form>
     <nav class="mobile-drawer-nav">
       <a href="#products">Mới về</a>
+      <a href="shop.html">Tất cả sản phẩm</a>
+      <a href="sale.html" class="nav-sale">Giảm giá</a>
       <a href="#reels">Video</a>
-      <a href="#collections">Bộ sưu tập</a>
       <a href="#contact">Liên hệ</a>
     </nav>
     <div class="mobile-drawer-sub">
       <button type="button" data-info="size">Bảng size</button>
+      <button type="button" data-info="order">Cách đặt hàng</button>
       <a href="https://www.facebook.com/trukuky" target="_blank" rel="noopener">Fanpage Facebook</a>
     </div>
-    <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Nhắn Trukuky tư vấn</a>
+    <a href="shop.html" class="btn btn-primary btn-lg">Xem tất cả sản phẩm</a>
   </div>
 </div>
 
@@ -111,12 +114,12 @@
       <div class="hero-text">
         <span class="hero-eyebrow">Trukuky · Thời trang mẹ &amp; bé gái tại Hải Phòng</span>
         <h1 class="hero-title">Thoải mái<br>là <em>chính mình.</em></h1>
-        <p class="hero-slogan">Những lựa chọn dễ mặc, dễ phối để bé khám phá phong cách riêng — cùng mẹ tìm đúng mẫu, đúng size qua tư vấn trực tiếp.</p>
+        <p class="hero-slogan">Những lựa chọn dễ mặc, dễ phối để bé khám phá phong cách riêng — ảnh chụp thật tại cửa hàng, size còn hàng rà theo sổ sau mỗi buổi live.</p>
         <div class="hero-actions">
-          <a href="#products" class="btn btn-primary btn-lg">Khám phá đồ mới</a>
-          <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-outline btn-lg">Nhắn Trukuky tư vấn</a>
+          <a href="#products" class="btn btn-primary btn-lg">Hàng mới về</a>
+          <a href="shop.html" class="btn btn-outline btn-lg">Tất cả sản phẩm</a>
         </div>
-        <span class="hero-proof">Xem ảnh thật · Chọn mẫu theo nhu cầu · Xác nhận giá và size qua Facebook</span>
+        <span class="hero-proof">Đặt trên web · Trukuky gọi xác nhận size còn · Thanh toán khi nhận hàng</span>
       </div>
       <figure class="hero-photo">
         <picture>
@@ -128,19 +131,44 @@
     </div>
   </section>
 
+  <!-- 01b · CAM KẾT — bốn câu này phải luôn đúng, không câu nào là lời hứa suông -->
+  <section class="trust-bar" aria-label="Cam kết của Trukuky">
+    <div class="container trust-row">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>
+        <div><b>Trả tiền khi nhận hàng</b><span>Xem hàng rồi mới thanh toán</span></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 2 .7 3a2 2 0 0 1-.4 2.1L8 10.1a16 16 0 0 0 6 6l1.3-1.4a2 2 0 0 1 2.1-.4c1 .3 2 .5 3 .7a2 2 0 0 1 1.6 2Z"/></svg>
+        <div><b>Gọi xác nhận trước khi gửi</b><span>Đúng size còn, đúng tổng tiền</span></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>
+        <div><b>Ảnh chụp thật</b><span>Chụp tại 43 Lê Chân, không lấy ảnh mạng</span></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        <div><b>Xem lại đoạn live</b><span>Mẫu nào cũng có link đúng phút giới thiệu</span></div>
+      </div>
+    </div>
+  </section>
+
   <!-- 02 · HÀNG MỚI — catalogue tư vấn, chỉ hiển giá đã xác nhận -->
   <section class="section container section-glow glow-bl glow-gold" id="products">
     <div class="section-head section-head--row">
       <div>
         <div class="brush brush--head" aria-hidden="true"><svg viewBox="0 0 300 100" preserveAspectRatio="none"><path d="M20,60 C40,20 90,15 140,35 C190,55 230,25 270,20 C285,18 290,40 275,50 C230,75 170,80 120,70 C80,62 40,80 20,60 Z" fill="currentColor" filter="url(#brushTexture2)"/></svg></div>
-        <span class="eyebrow">Hàng mới về</span>
-        <h2 class="brush-underline">Chọn theo khoảnh khắc của bé<svg viewBox="0 0 300 20" preserveAspectRatio="none"><path d="M2 14 Q60 2 120 12 T240 10 T298 14" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" pathLength="100"/></svg></h2>
-        <p class="section-lead">Mặc đi học, đi chơi hay cùng mẹ xuống phố — xem ảnh thật, chọn mẫu rồi nhắn mã để Trukuky tư vấn.</p>
+        <span class="eyebrow" id="dropEyebrow">Hàng mới về</span>
+        <h2 class="brush-underline">Đợt hàng mới nhất<svg viewBox="0 0 300 20" preserveAspectRatio="none"><path d="M2 14 Q60 2 120 12 T240 10 T298 14" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" pathLength="100"/></svg></h2>
+        <p class="section-lead">Những mẫu vừa lên trong buổi live gần nhất và còn size. Chọn size rồi thêm vào giỏ — Trukuky gọi lại xác nhận trước khi gửi hàng.</p>
       </div>
-      <button type="button" class="btn btn-ghost-pink btn-sm" data-info="size">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v8H3z"/><path d="M7 8v4M11 8v3M15 8v4M19 8v3"/></svg>
-        Bảng size
-      </button>
+      <div class="section-head-actions">
+        <button type="button" class="btn btn-ghost-pink btn-sm" data-info="size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v8H3z"/><path d="M7 8v4M11 8v3M15 8v4M19 8v3"/></svg>
+          Bảng size
+        </button>
+        <a href="shop.html" class="btn btn-outline btn-sm">Tất cả sản phẩm ›</a>
+      </div>
     </div>
 
     <div class="filter-chips" id="filterChips" role="group" aria-label="Lọc sản phẩm"></div>
@@ -158,7 +186,21 @@
       </div>
     </div>
     <div class="frame-grid" id="productGrid"></div>
+    <p class="grid-more"><a href="shop.html" class="btn btn-outline">Xem tất cả sản phẩm của Trukuky ›</a></p>
     <div class="featured-card featured-card--in-section" id="featuredCard"></div>
+  </section>
+
+  <!-- 02b · GIẢM GIÁ — khu riêng, chỉ hiện khi thật sự có mẫu đang giảm -->
+  <section class="section container sale-strip" id="sale" hidden>
+    <div class="section-head section-head--row">
+      <div>
+        <span class="eyebrow eyebrow-sale">Đang giảm giá</span>
+        <h2>Mẫu Trukuky đang xả</h2>
+        <p class="section-lead">Các mẫu shop đã công bố giảm giá trong buổi live. Số lượng và size còn lại có hạn — shop xác nhận trước khi gửi.</p>
+      </div>
+      <a href="sale.html" class="btn btn-sale btn-sm">Xem tất cả hàng giảm ›</a>
+    </div>
+    <div class="frame-grid" id="saleGrid"></div>
   </section>
 
   <!-- 03 · VIDEO — click-to-play, không tự phát âm thanh -->
@@ -172,7 +214,7 @@
       </div>
       <div class="reels-cta">
         <a href="https://www.facebook.com/trukuky/reels" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Xem Reels trên Facebook</a>
-        <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-ghost-pink btn-sm">Hỏi mẫu trong clip</a>
+        <a href="shop.html" class="btn btn-ghost-pink btn-sm">Xem mẫu trong clip</a>
       </div>
     </div>
     <div class="reel-rail" id="reelRail"></div>
@@ -197,15 +239,15 @@
       <div class="story-grid">
         <div class="story-inner">
           <span class="eyebrow">Mẹ dễ chọn, bé được là mình</span>
-          <h2>Tư vấn bắt đầu từ một mã mẫu</h2>
+          <h2>Đặt hàng trong ba bước</h2>
           <p class="story-quote">“Không cần chọn thật nhiều — chỉ cần chọn đúng thứ bé muốn mặc.”</p>
           <ol class="consult-steps">
-            <li><span>01</span><div><b>Chọn mẫu</b><p>Mở xem nhanh hoặc trang chi tiết để xem ảnh và video hiện có.</p></div></li>
-            <li><span>02</span><div><b>Gửi mã</b><p>Bấm “Nhắn hỏi mẫu”; mã, size và màu dự kiến được sao chép để dán vào Messenger.</p></div></li>
-            <li><span>03</span><div><b>Xác nhận</b><p>Shop kiểm tra giá, size, tình trạng hàng và cách giao trước khi chốt.</p></div></li>
+            <li><span>01</span><div><b>Chọn mẫu và size</b><p>Bấm vào ảnh để xem nhanh, hoặc mở trang chi tiết để xem hết các góc chụp.</p></div></li>
+            <li><span>02</span><div><b>Thêm vào giỏ và gửi đơn</b><p>Điền tên, số điện thoại và địa chỉ. Website sinh một mã đơn để hai bên cùng tra.</p></div></li>
+            <li><span>03</span><div><b>Trukuky gọi xác nhận</b><p>Shop đối chiếu sổ để chắc chắn còn đúng size, báo phí giao và tổng tiền trước khi gửi.</p></div></li>
           </ol>
           <div class="contact-actions">
-            <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Nhắn Trukuky tư vấn</a>
+            <a href="shop.html" class="btn btn-primary btn-lg">Bắt đầu chọn mẫu</a>
             <a href="https://www.facebook.com/trukuky" target="_blank" rel="noopener" class="btn btn-outline btn-lg">Xem Fanpage</a>
           </div>
         </div>
@@ -248,12 +290,12 @@
     <div class="footer-col">
       <h4>Mua sắm</h4>
       <ul>
-        <li><a href="#products" data-filter="new">Mới về</a></li>
-        <li><a href="#products" data-filter="girls">Bé gái</a></li>
-        <li><a href="#products" data-filter="matching">Đồ đôi Mẹ &amp; Bé</a></li>
-        <li><a href="#products" data-filter="accessories">Phụ kiện</a></li>
-        <li><a href="#collections">Bộ sưu tập</a></li>
-        <li><a href="cart.html" data-commerce-only hidden>Giỏ hàng</a></li>
+        <li><a href="shop.html">Tất cả sản phẩm</a></li>
+        <li><a href="sale.html">Đang giảm giá</a></li>
+        <li><a href="shop.html#products" data-filter="matching">Đồ đôi Mẹ &amp; Bé</a></li>
+        <li><a href="shop.html#products" data-filter="accessories">Phụ kiện</a></li>
+        <li><a href="shop.html#products" data-filter="live">Mẫu live còn size</a></li>
+        <li><a href="cart.html" data-commerce-only>Giỏ hàng</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -277,13 +319,12 @@
   </div>
   <div class="container footer-bottom">
     <p>© <span id="year">2026</span> Trukuky · 43 Lê Chân, Hải Phòng</p>
-    <p>Xem mẫu trên website · Xác nhận giá, size và tình trạng hàng qua Fanpage</p>
+    <p>Đặt hàng trên website · Trukuky gọi xác nhận size còn và phí giao trước khi gửi · Thanh toán khi nhận hàng</p>
   </div>
 </footer>
 
 <div class="float-cta">
-  <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="fb-btn" aria-label="Nhắn Messenger"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.1 2 11.2c0 2.9 1.4 5.5 3.7 7.2V22l3.4-1.9c.9.3 1.9.4 2.9.4 5.5 0 10-4.1 10-9.3S17.5 2 12 2Zm1 12.4-2.5-2.7-4.9 2.7 5.4-5.7 2.6 2.7 4.8-2.7-5.4 5.7Z"/></svg></a>
-  <a href="cart.html" class="cart-fab-btn" aria-label="Giỏ hàng" data-commerce-only hidden>
+  <a href="cart.html" class="cart-fab-btn" aria-label="Giỏ hàng" data-commerce-only>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
     <span class="cart-badge" data-cart-badge>0</span>
   </a>
@@ -306,10 +347,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
           Thêm vào giỏ
         </button>
-        <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary lightbox-consult" data-consult-product="" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A8 8 0 1 1 21 15Z"/></svg>
-          Nhắn hỏi mẫu này
-        </a>
         <a href="#" class="btn btn-ghost-pink lightbox-detail-link">Xem chi tiết</a>
       </div>
     </div>
@@ -330,6 +367,6 @@
 <script src="js/ui.js?v=4"></script>
 <script src="js/cart.js?v=2"></script>
 <script src="js/analytics.js?v=1"></script>
-<script src="js/main.js?v=20"></script>
+<script src="js/main.js?v=22"></script>
 </body>
 </html>

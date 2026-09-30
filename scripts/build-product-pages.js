@@ -22,17 +22,27 @@ const ratioOf = (src) => {
   return (size ? size[0] / size[1] : DEFAULT_RATIO).toFixed(4);
 };
 
-/* Giá chưa được shop xác nhận không xuất hiện trên trang, metadata hoặc dữ
-   liệu có cấu trúc. Chỉ priceStatus="confirmed" mới mở luồng đặt hàng. */
-const isOrderable = (p) => p.priceStatus === 'confirmed'
+/* PHẢI khớp với hasRealPrice()/priceHTML() trong js/data.js. Hai chỗ này lệch
+   nhau thì trang tĩnh và trang động sẽ nói hai điều khác nhau về cùng một mẫu —
+   sửa một bên thì sửa cả bên kia. */
+const isOrderable = (p) => ['confirmed', 'live'].includes(p.priceStatus)
   && Number.isFinite(Number(p.price))
   && Number(p.price) > 0;
 const HAS_ORDERABLE_PRODUCTS = products.some(isOrderable);
-const priceBlock = (p) => (isOrderable(p)
-  ? `<span class="price-value">${vnd(p.price)}</span>`
-  : (p.priceStatus === 'live' && Number(p.price) > 0
-    ? `<span class="price-value price-live">${p.priceFrom ? '<small>Từ</small> ' : ''}${vnd(p.price)}</span>`
-    : '<span class="price-on-request">Liên hệ xác nhận giá</span>'));
+
+const saleOriginal = (p) => (Number.isFinite(Number(p.priceOriginal)) && Number(p.priceOriginal) > Number(p.price)
+  ? Number(p.priceOriginal) : 0);
+const discountPct = (p) => (saleOriginal(p) ? Math.round((1 - Number(p.price) / saleOriginal(p)) * 100) : 0);
+
+const priceBlock = (p) => {
+  if (!isOrderable(p)) return '<span class="price-on-request">Đang cập nhật giá</span>';
+  const from = p.priceFrom ? '<small>Từ</small> ' : '';
+  const was = saleOriginal(p);
+  if (!was) return `<span class="price-value">${from}${vnd(p.price)}</span>`;
+  return `<span class="price-group"><span class="price-value is-sale">${from}${vnd(p.price)}</span>`
+    + `<s class="price-was">${vnd(was)}</s>`
+    + `<span class="price-off">-${discountPct(p)}%</span></span>`;
+};
 
 /* Mẫu lấy từ buổi livestream: giá từng món, size còn theo sổ chốt đơn và link
    mở đúng đoạn live có mẫu này. Không bao giờ in tên khách hay số lượng tồn. */
@@ -76,8 +86,7 @@ const reelBlock = (p) => {
 
 const inFrameBlock = (p) => (!(p.inFrame || []).length ? '' : `
         <p class="in-frame">Trong ảnh còn có: ${esc(p.inFrame.join(' · '))}.
-          <span>Các món này chưa được chụp riêng nên chưa bán online — hỏi Trukuky qua
-          <a href="https://m.me/trukuky" target="_blank" rel="noopener">Messenger</a> nếu bạn muốn mua.</span></p>`);
+          <span>Các món này chưa được chụp riêng nên chưa bán trên web — hỏi thêm khi Trukuky gọi xác nhận đơn.</span></p>`);
 
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -214,7 +223,7 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
 <link rel="stylesheet" href="../css/fonts.css?v=1">
 <link rel="stylesheet" href="../css/tokens.css?v=4">
 <link rel="stylesheet" href="../css/base.css?v=9">
-<link rel="stylesheet" href="../css/style.css?v=27">
+<link rel="stylesheet" href="../css/style.css?v=31">
 <link rel="stylesheet" href="../css/shop.css?v=7">
 <script type="application/ld+json">${jsonLd(p)}</script>
 </head>
@@ -238,8 +247,9 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
     </a>
     <nav class="main-nav" aria-label="Chính">
       <a href="../index.html#products">Mới về</a>
+      <a href="../shop.html">Tất cả sản phẩm</a>
+      <a href="../sale.html" class="nav-sale">Giảm giá</a>
       <a href="../index.html#reels">Video</a>
-      <a href="../index.html#collections">Bộ sưu tập</a>
       <a href="../index.html#contact">Liên hệ</a>
     </nav>
     <div class="header-actions">
@@ -286,12 +296,10 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
           <button type="button" class="btn btn-primary btn-lg add-to-cart-btn" id="pdAddBtn" data-add-to-cart="${p.id}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
             Thêm vào giỏ
-          </button>` : `
-          <a href="https://m.me/trukuky" target="_blank" rel="noopener" class="btn btn-primary btn-lg" id="pdConsultBtn" data-consult-product="${p.id}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5.1A8 8 0 1 1 21 15Z"/></svg>
-            Nhắn hỏi mẫu ${p.id}
-          </a>`}
-          ${HAS_ORDERABLE_PRODUCTS ? '<a href="../cart.html" class="btn btn-ghost-pink btn-lg" data-commerce-only>Xem giỏ hàng</a>' : ''}
+          </button>
+          <a href="../cart.html" class="btn btn-ghost-pink btn-lg" data-commerce-only>Xem giỏ hàng</a>` : `
+          <p class="pd-pending">Mẫu này đang chờ Trukuky chốt bảng giá nên chưa mở bán trên web.</p>
+          <a href="../shop.html" class="btn btn-primary btn-lg">Xem các mẫu đang bán</a>`}
         </div>
 
         <ul class="pd-trust">
@@ -322,8 +330,9 @@ ${isOrderable(p) ? `<meta property="product:price:amount" content="${p.price}">
       <h4>Mua sắm</h4>
       <ul>
         <li><a href="../index.html#products">Mới về</a></li>
+        <li><a href="../shop.html">Tất cả sản phẩm</a></li>
+        <li><a href="../sale.html">Đang giảm giá</a></li>
         <li><a href="../index.html#reels">Video</a></li>
-        <li><a href="../index.html#collections">Bộ sưu tập</a></li>
         ${HAS_ORDERABLE_PRODUCTS ? '<li><a href="../cart.html" data-commerce-only>Giỏ hàng</a></li>' : ''}
       </ul>
     </div>

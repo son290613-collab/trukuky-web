@@ -9,7 +9,11 @@
 function initHeader() {
   const header = document.querySelector('.site-header');
   if (header) {
-    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 20);
+    /* Đầu trang trong suốt chỉ hợp lý khi bên dưới là ảnh hero tối. Trang Tất
+       cả sản phẩm và trang Sale mở thẳng vào nền kem, nên đầu trang phải đục
+       ngay từ đầu — nếu không, chữ trắng nằm trên nền kem và không đọc được. */
+    const solidAlways = !document.querySelector('.hero');
+    const onScroll = () => header.classList.toggle('is-scrolled', solidAlways || window.scrollY > 20);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
   }
@@ -58,17 +62,43 @@ function initHeroPhoto() {
   if (cap) cap.textContent = 'Khoảnh khắc khởi nguồn của Trukuky';
 }
 
-/* ---------- Khu sản phẩm: chip lọc + lưới + tìm kiếm ---------- */
-let activeFilter = 'live';
+/* ---------- Khu sản phẩm: chip lọc + lưới + tìm kiếm ----------
+   Cùng một bộ máy lưới chạy cho ba trang khác nhau, khác nhau đúng một thứ:
+   danh sách gốc mà nó được phép hiển thị.
+
+     home  — trang chủ, chỉ đợt live mới nhất + nhóm "Mới về".
+     shop  — trang Tất cả sản phẩm, toàn bộ mẫu bán được.
+     sale  — trang Giảm giá.
+
+   Nhờ tách ra ở đúng một chỗ, trang chủ không phình ra sau mỗi buổi live mà
+   vẫn không cần một bản sao thứ hai của lưới, chip và ô tìm kiếm. */
+let productScope = document.body.dataset.scope || 'home';
+let activeFilter = 'all';
 let searchQuery = '';
+
+function scopedProducts() {
+  if (productScope === 'shop') return shopProducts();
+  if (productScope === 'sale') return saleProducts();
+  return homeProducts();
+}
+
+/* Xem theo bộ sưu tập chỉ hợp lý ở trang Tất cả sản phẩm: đó là lúc khách
+   đang dạo cả cửa hàng. Trang chủ và trang Sale đã tự là một câu trả lời hẹp. */
+const SCOPE_ALLOWS_COLLECTIONS = { shop: true, home: false, sale: false };
 
 function currentProducts() {
   const q = normalizeText(searchQuery.trim());
-  return PRODUCTS.filter((p) => {
+  return scopedProducts().filter((p) => {
     if (!matchesFilter(p, activeFilter)) return false;
     if (!q) return true;
     return normalizeText(`${p.title} ${p.desc || ''} ${(p.ages || []).join(' ')}`).includes(q);
   });
+}
+
+/* Số trên chip phải là số mẫu khách thật sự sẽ thấy khi bấm vào chip đó —
+   đếm trên toàn kho sẽ hứa 25 rồi hiện ra 9. */
+function countInScope(key) {
+  return scopedProducts().filter((p) => matchesFilter(p, key)).length;
 }
 
 function renderChips() {
@@ -76,10 +106,26 @@ function renderChips() {
   if (!root) return;
   const known = PRODUCT_FILTERS.some((f) => f.key === activeFilter);
   const extra = known ? [] : [{ key: activeFilter, label: EXTRA_FILTER_LABELS[activeFilter] || activeFilter }];
-  root.innerHTML = [...PRODUCT_FILTERS, ...extra].map((f) => `
-    <button type="button" class="chip${f.key === activeFilter ? ' is-active' : ''}" data-chip="${f.key}" aria-pressed="${f.key === activeFilter}">
-      ${f.label}<span class="chip-count">${countProducts(f.key)}</span>
+  root.innerHTML = [...PRODUCT_FILTERS, ...extra]
+    .filter((f) => !(f.key === 'sale' && productScope !== 'shop'))
+    .map((f) => ({ ...f, n: countInScope(f.key) }))
+    .filter((f) => f.n > 0 || f.key === activeFilter)
+    .map((f) => `
+    <button type="button" class="chip${f.key === activeFilter ? ' is-active' : ''}${f.key === 'sale' ? ' chip-sale' : ''}" data-chip="${f.key}" aria-pressed="${f.key === activeFilter}">
+      ${f.label}<span class="chip-count">${f.n}</span>
     </button>`).join('');
+}
+
+/* Bộ sưu tập sau khi đã lọc theo phạm vi trang. collections.json gom cả mẫu
+   chưa có giá, nên nếu đổ thẳng ra lưới thì phần đếm nói 25 mà trang hiện 39
+   thẻ — trong đó có những thẻ khách bấm vào rồi mới biết là không mua được.
+   Dùng chung hàm này cho cả phần đếm lẫn phần dựng lưới để hai con số không
+   bao giờ lệch nhau. */
+function visibleCollections() {
+  const allowed = new Set(scopedProducts().map((p) => p.id));
+  return COLLECTIONS
+    .map((c) => ({ ...c, items: c.items.filter((p) => allowed.has(p.id)) }))
+    .filter((c) => c.items.length);
 }
 
 function renderGrid() {
@@ -92,16 +138,16 @@ function renderGrid() {
     const filterLabel = activeFilter === 'all'
       ? ''
       : ` trong “${PRODUCT_FILTERS.find((f) => f.key === activeFilter)?.label || EXTRA_FILTER_LABELS[activeFilter] || activeFilter}”`;
-    const dangDao = activeFilter === 'all' && !searchQuery.trim();
+    const dangDao = activeFilter === 'all' && !searchQuery.trim() && SCOPE_ALLOWS_COLLECTIONS[productScope];
     count.textContent = searchQuery.trim()
       ? `${list.length} kết quả cho “${searchQuery.trim()}”${filterLabel}`
-      : dangDao && COLLECTIONS.length
-        ? `${list.length} sản phẩm, xếp thành ${COLLECTIONS.length} bộ`
+      : dangDao && visibleCollections().length
+        ? `${list.length} sản phẩm, xếp thành ${visibleCollections().length} bộ`
         : `${list.length} sản phẩm${filterLabel}`;
   }
 
   if (!list.length) {
-    grid.innerHTML = `<p class="grid-empty">Không tìm thấy sản phẩm nào. Thử bỏ bớt bộ lọc, hoặc <a href="https://m.me/trukuky" target="_blank" rel="noopener">nhắn Messenger</a> để Trukuky tìm giúp.</p>`;
+    grid.innerHTML = `<p class="grid-empty">Không có mẫu nào khớp. <button type="button" class="link-btn" data-chip="all">Bỏ bộ lọc</button>${productScope === 'home' ? ' hoặc <a href="shop.html">xem tất cả sản phẩm</a>' : ''}.</p>`;
     grid.classList.remove('is-collections');
     return;
   }
@@ -114,16 +160,16 @@ function renderGrid() {
      ĐANG TÌM (đã bấm chip hoặc gõ ô tìm): khách hỏi "có cái này không?" —
      trả lời bằng một lưới phẳng, ngắn nhất tới kết quả. Chen lời dẫn vào
      lúc này chỉ làm khách phải cuộn thêm. */
-  const dangDao = activeFilter === 'all' && !searchQuery.trim();
+  const dangDao = activeFilter === 'all' && !searchQuery.trim() && SCOPE_ALLOWS_COLLECTIONS[productScope];
 
-  if (!dangDao || !COLLECTIONS.length) {
+  if (!dangDao || !visibleCollections().length) {
     grid.classList.remove('is-collections');
     grid.innerHTML = framesFor(list).map(frameCardHTML).join('');
     return;
   }
 
   grid.classList.add('is-collections');
-    grid.innerHTML = COLLECTIONS.map((c) => `
+  grid.innerHTML = visibleCollections().map((c) => `
     <div class="collection" id="bst-${escAttr(c.id)}">
       <div class="collection-head">
         <h3>${escAttr(c.title)}</h3>
@@ -327,10 +373,7 @@ function renderFeatured() {
           <button type="button" class="btn btn-primary add-to-cart-btn" data-add-to-cart="${p.id}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
             Chọn size &amp; thêm vào giỏ
-          </button>` : `
-          <a class="btn btn-primary" href="${STORE_MESSENGER}" target="_blank" rel="noopener" data-consult-product="${p.id}">
-            ${CHAT_ICON_SVG} Nhắn hỏi mẫu ${p.id}
-          </a>`}
+          </button>` : ''}
         <a href="${productUrl(p.id)}" class="btn btn-ghost-pink">Xem chi tiết</a>
       </div>
     </div>`;
@@ -367,23 +410,17 @@ function variantPickerHTML(p) {
 
 function syncQuickAddState() {
   const addBtn = document.querySelector('.lightbox-add-to-cart');
-  const consultLink = document.querySelector('.lightbox-consult');
-  if (!addBtn || !consultLink) return;
+  if (!addBtn) return;
   const p = quickProduct;
   if (!p) {
     addBtn.style.display = 'none';
-    consultLink.style.display = 'none';
     return;
   }
   const orderable = isOrderableProduct(p);
   addBtn.style.display = orderable ? '' : 'none';
-  consultLink.style.display = orderable ? 'none' : '';
   addBtn.dataset.addToCart = p.id;
   addBtn.dataset.size = quickVariant.size;
   addBtn.dataset.color = quickVariant.color;
-  consultLink.dataset.consultProduct = p.id;
-  consultLink.dataset.size = quickVariant.size;
-  consultLink.dataset.color = quickVariant.color;
   const needSize = (p.sizes || []).length > 0 && !quickVariant.size;
   const needColor = (p.colors || []).length > 0 && !quickVariant.color;
   addBtn.disabled = orderable && (needSize || needColor);
@@ -391,7 +428,7 @@ function syncQuickAddState() {
   if (hint) {
     hint.textContent = orderable
       ? missingVariantHint(needSize, needColor)
-      : 'Chọn size và màu dự kiến; Trukuky sẽ xác nhận lại khi tư vấn.';
+      : 'Mẫu này đang chờ Trukuky gửi bảng giá nên chưa đặt được trên web.';
   }
 }
 
@@ -422,8 +459,7 @@ function renderQuickMedia(imgSrc, title) {
 function inFrameHTML(p) {
   if (!p || !(p.inFrame || []).length) return '';
   return `<p class="in-frame">Trong ảnh còn có: ${p.inFrame.join(' · ')}.
-    <span>Các món này chưa được chụp riêng nên chưa bán online — hỏi Trukuky qua
-    <a href="https://m.me/trukuky" target="_blank" rel="noopener">Messenger</a> nếu bạn muốn mua.</span></p>`;
+    <span>Các món này chưa được chụp riêng nên chưa bán trên web — hỏi thêm khi Trukuky gọi xác nhận đơn.</span></p>`;
 }
 
 function renderQuickInfo() {
@@ -642,7 +678,7 @@ function reelCardHTML(r) {
       ${(r.inFrame || []).length ? `<p class="reel-inframe">Trong clip còn có: ${r.inFrame.map(escAttr).join(' · ')}</p>` : ''}
       ${product
         ? `<a class="reel-link" href="${productUrl(product.id)}">Xem ${escAttr(product.title)} ›</a>`
-        : `<a class="reel-link reel-link--ask" href="https://m.me/trukuky" target="_blank" rel="noopener">Hỏi mẫu này qua Messenger ›</a>`}
+        : `<a class="reel-link reel-link--ask" href="shop.html">Xem các mẫu đang bán ›</a>`}
     </div>
   </article>`;
 }
@@ -769,12 +805,54 @@ function initTilt() {
   });
 }
 
+/* ---------- Khu giảm giá trên trang chủ ----------
+   Khu này tự ẩn khi không có mẫu nào đang giảm. Một mục "Sale" trống quanh
+   năm dạy khách rằng chữ sale ở đây không có nghĩa gì. */
+const SALE_STRIP_MAX = 4;
+
+function renderSaleStrip() {
+  const section = document.getElementById('sale');
+  const grid = document.getElementById('saleGrid');
+  if (!section || !grid) return;
+  const list = saleProducts();
+  if (!list.length) {
+    section.hidden = true;
+    document.querySelectorAll('.nav-sale').forEach((a) => { a.hidden = true; });
+    return;
+  }
+  section.hidden = false;
+  grid.innerHTML = framesFor(list.slice(0, SALE_STRIP_MAX)).map(frameCardHTML).join('');
+}
+
+/* Mẫu đã có ảnh nhưng chưa có bảng giá: hiện ở cuối trang Tất cả sản phẩm,
+   tách hẳn khỏi lưới bán hàng và không có nút mua. */
+function renderPending() {
+  const section = document.getElementById('pending');
+  const grid = document.getElementById('pendingGrid');
+  if (!section || !grid) return;
+  const list = pendingProducts();
+  if (!list.length) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+  grid.innerHTML = framesFor(list).map(frameCardHTML).join('');
+}
+
+/* Nhãn đợt hàng lấy thẳng từ dữ liệu, không gõ tay vào HTML — sau buổi live
+   sau, shop sửa products.json là tiêu đề trang chủ tự đổi theo. */
+function renderDropLabel() {
+  const el = document.getElementById('dropEyebrow');
+  if (!el) return;
+  const drop = latestDrop();
+  if (drop !== CATALOGUE_DROP) el.textContent = `Hàng mới về · ${dropLabel(drop)}`;
+}
+
 /* ---------- Boot ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initLightbox();
   initInfoModal();
-  initConsultLinks();
   initCart();
   initTilt();
   initHeroPhoto();
@@ -784,7 +862,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 productsReady.then(() => {
+  renderDropLabel();
   initProductSection();
+  renderSaleStrip();
+  renderPending();
   renderFeatured();
   renderCollectionShowcase();
   renderReels();
